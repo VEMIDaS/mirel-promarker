@@ -1,0 +1,16 @@
+server:
+  servlet:
+    context-path: /mipla2
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mipla?characterEncoding=UTF-8&serverTimezone=JST
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: mipla
+    password: mipla
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+mipla2:
+  config:
+    storage-dir: "C:\\data\\m2\\storage"
