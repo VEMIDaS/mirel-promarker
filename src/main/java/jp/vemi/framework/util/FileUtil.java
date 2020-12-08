@@ -24,6 +24,9 @@ import org.springframework.util.Assert;
 
 import com.google.common.collect.Lists;
 
+/**
+ * File management utility class.
+ */
 public class FileUtil {
 
   final protected static int BUF_SIZE_DEFAULT = 1024;
@@ -182,17 +185,37 @@ public class FileUtil {
           }
 
           CloseableUtil.close(in);
-    
+
         }
 
       }
 
       CloseableUtil.close(zip);
-    
+
     } catch(IOException e) {
       throw new MirelApplicationException(e);
     }
 
     return true;
   }
+
+  /**
+   * Search files recursively by filename.
+   * @param filePath
+   * @param fileName
+   * @return list of hitted filePath.
+   */
+  public static List<String> findByFileName(String filePath, String fileName) {
+
+    List<File> files = getFiles(new File(filePath));
+
+    List<String> targetFileNames = Lists.newArrayList();
+    for (File file : files) {
+      if (file.getName().equals(fileName)) {
+        targetFileNames.add(file.getAbsolutePath());
+      }
+    }
+    return targetFileNames;
+  }
+
 }
