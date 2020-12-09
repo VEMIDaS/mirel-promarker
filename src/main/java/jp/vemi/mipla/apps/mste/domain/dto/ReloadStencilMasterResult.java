@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.mirel.mipla.apps.mste.domain.dto;
+package jp.vemi.mipla.apps.mste.domain.dto;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
