@@ -27,7 +27,7 @@ public class StencilSettingsYml {
   protected Stencil stencil;
 
   /**
-   * Stencil
+   * Stencil settings.
    */
   @Setter
   @Getter
@@ -39,12 +39,17 @@ public class StencilSettingsYml {
     protected CodeInfo codeInfo;
     protected List<Store> store;
 
+    /**
+     * Configurations.
+     */
     @Setter
     @Getter
     @NoArgsConstructor
     public static class Config {
       protected String id;
       protected String name;
+      protected String categoryId;
+      protected String categoryName;
       protected String serial;
       protected String lastUpdate;
       protected String lastUpdateUser;
@@ -52,7 +57,7 @@ public class StencilSettingsYml {
     }
 
     /**
-     * CodeInfo
+     * Doc meta.
      */
     @Setter
     @Getter
