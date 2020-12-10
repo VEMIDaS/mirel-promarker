@@ -7,7 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import com.google.common.collect.Maps;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -49,7 +54,7 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
 
         ApiResponse<ReloadStencilMasterResult> resp = ApiResponse.<ReloadStencilMasterResult>builder().build();
 
-        // TODO implementation.
+        this.read();
         resp.setModel(ReloadStencilMasterResult.builder().build());
 
         return resp;
@@ -60,24 +65,52 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
      * read from stencil directory.
      */
     protected void read() {
+        // clear.
+        stencilRepository.deleteAll();
+
+        // road stencil settings.
         String dir = StorageUtil.getBaseDir() + LogicTemplateEngine.getStencilMasterStorageDir();
         List<String> files = FileUtil.findByFileName(dir, "stencil-settings.yml");
+        Map<String, String> categories = Maps.newLinkedHashMap();
 
+        // save stencil record.
         for (String fileName : files) {
             StencilSettingsYml settings = readYaml(new File(fileName));
-            Config cfg = settings.getStencil().getConfig();
+            Config config = settings.getStencil().getConfig();
 
-            MsteStencil stencil = new MsteStencil();
-            stencil.setStencilCd(cfg.getId());
-            stencil.setStencilName(cfg.getName());
-            stencil.setItemKind("2");
-            stencil.setSort(1);
-            stencilRepository.save(stencil);
+            MsteStencil entry = new MsteStencil();
+            entry.setStencilCd(config.getId());
+            entry.setStencilName(config.getName());
+            entry.setItemKind("2");
+            entry.setSort(0);
+            stencilRepository.save(entry);
             System.out.println(
-                    cfg.getId() + "/" + cfg.getSerial() + ":" + cfg.getName() + "（" + cfg.getDescription() + "）");
+                    config.getId() + "/" + config.getSerial() + ":" + config.getName() + "（" + config.getDescription() + "）");
+
+            if (categories.containsKey(config.getCategoryId())) {
+                if (StringUtils.isEmpty(categories.get(config.getCategoryId()))) {
+                    categories.put(config.getCategoryId(), config.getCategoryName());
+                }
+            }
+        }
+
+        // save stencil record.
+        for (Entry<String, String> catentry : categories.entrySet()) {
+        MsteStencil entry = new MsteStencil();
+        entry.setStencilCd(catentry.getKey());
+        entry.setStencilName(catentry.getValue());
+        entry.setItemKind("1");
+        entry.setSort(0);
+        stencilRepository.save(entry);
         }
     }
 
+    /**
+     * read Stencil settings file.
+     * 
+     * @param file Setting file (Yaml)
+     * @return {@link StencilSettingsYml ステンシル定義YAML}
+     */
     protected StencilSettingsYml readYaml (File file) {
         StencilSettingsYml settings = null;
         try(InputStream stream = new FileSystemResource(file).getInputStream()) {
