@@ -8,11 +8,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * MSTE ステンシル
  */
 @Entity
 @Table(name = "mste_stencil")
+@Setter
+@Getter
 public class MsteStencil {
 
     /** ステンシルコード */

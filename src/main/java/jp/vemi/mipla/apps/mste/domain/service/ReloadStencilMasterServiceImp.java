@@ -68,7 +68,10 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
             Config cfg = settings.getStencil().getConfig();
 
             MsteStencil stencil = new MsteStencil();
-
+            stencil.setStencilCd(cfg.getId());
+            stencil.setStencilName(cfg.getName());
+            stencil.setItemKind("2");
+            stencil.setSort(1);
             stencilRepository.save(stencil);
             System.out.println(
                     cfg.getId() + "/" + cfg.getSerial() + ":" + cfg.getName() + "（" + cfg.getDescription() + "）");
