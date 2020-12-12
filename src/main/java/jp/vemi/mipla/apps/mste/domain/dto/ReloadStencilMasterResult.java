@@ -3,6 +3,8 @@
  */
 package jp.vemi.mipla.apps.mste.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import lombok.Builder;
@@ -15,8 +17,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ReloadStencilMasterResult {
-
 
   /**
   * {@inheritDoc}

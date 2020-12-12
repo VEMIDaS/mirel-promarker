@@ -19,7 +19,7 @@ import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
  * ステンシルマスタの更新.<br/>
  */
 @Service
-public class ReloadStencilMasterApi {
+public class ReloadStencilMasterApi implements MsteApi{
 
     @Autowired
     protected ReloadStencilMasterService service;

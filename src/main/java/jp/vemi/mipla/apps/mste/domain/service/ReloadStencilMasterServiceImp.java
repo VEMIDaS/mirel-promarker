@@ -81,15 +81,16 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
             MsteStencil entry = new MsteStencil();
             entry.setStencilCd(config.getId());
             entry.setStencilName(config.getName());
-            entry.setItemKind("2");
+            entry.setItemKind("1");
             entry.setSort(0);
             stencilRepository.save(entry);
-            System.out.println(
-                    config.getId() + "/" + config.getSerial() + ":" + config.getName() + "（" + config.getDescription() + "）");
+            System.out.println(config.getId() + "/" + config.getSerial() + ":" + config.getName());
 
-            if (categories.containsKey(config.getCategoryId())) {
-                if (StringUtils.isEmpty(categories.get(config.getCategoryId()))) {
-                    categories.put(config.getCategoryId(), config.getCategoryName());
+            if (false == StringUtils.isEmpty(config.getCategoryId())) {
+                if (false == categories.containsKey(config.getCategoryId())) {
+                    if (StringUtils.isEmpty(categories.get(config.getCategoryId()))) {
+                        categories.put(config.getCategoryId(), config.getCategoryName());
+                    }
                 }
             }
         }
@@ -99,7 +100,7 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
         MsteStencil entry = new MsteStencil();
         entry.setStencilCd(catentry.getKey());
         entry.setStencilName(catentry.getValue());
-        entry.setItemKind("1");
+        entry.setItemKind("0");
         entry.setSort(0);
         stencilRepository.save(entry);
         }
