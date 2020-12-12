@@ -204,6 +204,11 @@ public class SuggestServiceImp implements SuggestService {
             return elems;
         }
 
+        if (CollectionUtils.isEmpty(list2)) {
+            elems.addAll(list1);
+            return elems;
+        }
+
         list1.forEach(dataElement -> {
 
             Map<String, Object> target = Maps.newLinkedHashMap(dataElement);
