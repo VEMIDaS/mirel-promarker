@@ -200,12 +200,16 @@ public class SuggestServiceImp implements SuggestService {
         final List<Map<String, Object>> elems = Lists.newArrayList();
 
         if (CollectionUtils.isEmpty(list1)) {
-            elems.addAll(list2);
+            if (false == CollectionUtils.isEmpty(list2)) {
+                elems.addAll(list2);
+            }
             return elems;
         }
 
         if (CollectionUtils.isEmpty(list2)) {
-            elems.addAll(list1);
+            if (false == CollectionUtils.isEmpty(list1)) {
+                elems.addAll(list1);
+            }
             return elems;
         }
 
