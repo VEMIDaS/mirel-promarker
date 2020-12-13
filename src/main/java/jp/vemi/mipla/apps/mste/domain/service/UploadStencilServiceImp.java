@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2015-2019 mirelplatform.
+ * Copyright(c) 2015-2020 mirelplatform.
  */
 package jp.vemi.mipla.apps.mste.domain.service;
 

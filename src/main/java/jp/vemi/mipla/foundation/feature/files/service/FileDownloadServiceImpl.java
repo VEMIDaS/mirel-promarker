@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2015-2019 mirelplatform.
+ * Copyright(c) 2015-2020 mirelplatform.
  */
 package jp.vemi.mipla.foundation.feature.files.service;
 
@@ -55,13 +55,13 @@ public class FileDownloadServiceImpl implements FileDownloadService {
         item = fileManagementRepository.findById(fileId).get();
       } catch (NoSuchElementException e) {
         e.printStackTrace();
-        resp.infos.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
+        resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
         return;
       }
 
       // file record is null.
       if (null == item) {
-        resp.infos.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
+        resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
         return;
       }
 

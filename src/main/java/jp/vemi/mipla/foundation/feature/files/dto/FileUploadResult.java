@@ -25,9 +25,10 @@ import lombok.Builder.Default;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FileDownloadResult extends ServiceResult {
+public class FileUploadResult extends ServiceResult {
 
   @Default
   public List<Tuple3<String, String, Path>> paths = Lists.newArrayList();
-
+  public String uuid;
+  public String fileName;
 }

@@ -31,6 +31,7 @@ public class SuggestApi implements MsteApi {
 
         parameter.stencilCategory = (String)content.get("stencilCategoy");
         parameter.stencilCd = (String)content.get("stencilCanonicalName");
+        parameter.serialNo = (String)content.get("serialNo");
 
         ApiRequest<SuggestParameter> apiRequest = new ApiRequest<>();
         apiRequest.setModel(parameter);

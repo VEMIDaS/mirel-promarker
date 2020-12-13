@@ -94,7 +94,7 @@ public class GenerateServiceImp implements GenerateService{
             }
 
             // register fileitem.
-            Tuple2<String, String> file = fileRegisterService.register(new File(filePath));
+            Tuple2<String, String> file = fileRegisterService.register(new File(filePath), true);
 
             retItems.add(file);
 
@@ -114,13 +114,13 @@ public class GenerateServiceImp implements GenerateService{
           item = fileManagementRepository.findById(fileId).get();
         } catch (NoSuchElementException e) {
           e.printStackTrace();
-          resp.infos.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
+          resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
           return once;
         }
   
         // file record is null.
         if (null == item) {
-          resp.infos.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
+          resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
           return once;
         }
 
