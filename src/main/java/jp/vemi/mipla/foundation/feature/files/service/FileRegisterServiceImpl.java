@@ -12,6 +12,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import groovy.lang.Tuple2;
 import jp.vemi.framework.util.DateUtil;
@@ -29,26 +30,40 @@ public class FileRegisterServiceImpl implements FileRegisterService {
   @Autowired
   protected FileManagementRepository fileManagementRepository;
 
-
   protected static final String ATCH_FILE_NAME = "__file";
+
+  @Override
+  public Tuple2<String, String> register(MultipartFile multipartFile) {
+    String temporaryUuid = UUID.randomUUID().toString();
+    File temporary = new File(System.getProperty("java.io.tmpdir") + "/ProMarker/" + temporaryUuid);
+
+    FileUtil.transfer(multipartFile, temporary, multipartFile.getOriginalFilename());
+
+    return register(temporary, false);
+  }
+
   /**
    * {@inheritDoc}
    */
   @Override
-  public Tuple2<String, String> register(File srcFile) {
+  public Tuple2<String, String> register(File srcFile, boolean isZip) {
 
     String uuid = UUID.randomUUID().toString();
 
     String dest = getSaveDir(uuid);
     File destFile = new File(dest);
 
-    if(destFile.exists()) {
+    if (destFile.exists()) {
       // error... files exists already...
     }
 
-    if(false == FileUtil.zip(srcFile, dest, ATCH_FILE_NAME)){
-      // error... failed archive file...
-    };
+    if (isZip) {
+      if (false == FileUtil.zip(srcFile, dest, ATCH_FILE_NAME)) {
+        // error... failed archive file...
+      }
+    } else {
+      FileUtil.copy(srcFile, destFile);
+    }
 
     String fileName = srcFile.getName() + ".zip"; // ･･･きも･･･
     // create entity.
@@ -81,7 +96,6 @@ public class FileRegisterServiceImpl implements FileRegisterService {
     return StringUtils.joinWith("\\", StorageUtil.getBaseDir(), defaultAppDir(), y, m, uuid);
 
   }
-
 
   protected String defaultAppDir() {
     return "foundation/filemanagement";

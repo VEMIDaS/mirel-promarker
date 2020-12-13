@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +22,7 @@ import jp.vemi.framework.exeption.MirelSystemException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 
@@ -102,29 +104,59 @@ public class FileUtil {
     return path + '.' + newExtension;
   }
 
-  public static void copy(File src, File dest) throws IOException {
+  public static void transfer(MultipartFile src, File destDir, String fileName) {
+    Assert.notNull(src, "src file must not be null.");
+    Assert.notNull(destDir, "destDir file must not be null.");
+    Assert.hasText(fileName, "fileName file must not be null.");
 
+    if (false == destDir.exists()) {
+      destDir.mkdirs();
+    }
+
+    File targetFile = new File(destDir.getPath() + "/" + fileName);
+
+    try {
+      src.transferTo(targetFile);
+    } catch (IllegalStateException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  public static void copy(File src, File dest) {
     Assert.notNull(src, "src file must not be null.");
     Assert.notNull(dest, "dest file must not be null.");
 
-    if (src.exists()) {
-      throw new IllegalArgumentException("src file exists.");
+    if (false == src.exists()) {
+      throw new IllegalArgumentException("src file is not exists.");
     }
 
     if (src.isFile()) {
 
       // i/o fileIO
-      InputStream in = new FileInputStream(src);
-      OutputStream out = new FileOutputStream(dest);
+      InputStream in;
+      OutputStream out;
+      try {
+        in = new FileInputStream(src);
+        out = new FileOutputStream(dest);
 
-      // copy
-      byte[] buf = new byte[BUF_SIZE_DEFAULT];
-      while (in.read(buf) != -1) {
-        out.write(buf);
+        // copy
+        byte[] buf = new byte[BUF_SIZE_DEFAULT];
+        while (in.read(buf) != -1) {
+          out.write(buf);
+        }
+
+        // flush
+        out.flush();
+      } catch (FileNotFoundException e) {
+        throw new MirelSystemException(e);
+      } catch (IOException e) {
+        throw new MirelSystemException(e);
       }
 
-      // flush
-      out.flush();
 
       // close
       CloseableUtil.close(in);
@@ -136,8 +168,10 @@ public class FileUtil {
         dest.mkdirs();
       }
 
-      for (File file : dest.listFiles()) {
-        copy(file, dest);
+      for (File file : src.listFiles()) {
+        String absPath = file.getName();
+        File destFile = new File(dest.getPath() + "/" + absPath);
+        copy(file, destFile);
       }
 
     }

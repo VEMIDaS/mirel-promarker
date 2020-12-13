@@ -94,7 +94,7 @@ public class GenerateServiceImp implements GenerateService{
             }
 
             // register fileitem.
-            Tuple2<String, String> file = fileRegisterService.register(new File(filePath));
+            Tuple2<String, String> file = fileRegisterService.register(new File(filePath), true);
 
             retItems.add(file);
 

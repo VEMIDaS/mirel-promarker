@@ -4,6 +4,9 @@
 package jp.vemi.mipla.foundation.feature.files.service;
 
 import java.io.File;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import groovy.lang.Tuple2;
 
 /**
@@ -11,5 +14,7 @@ import groovy.lang.Tuple2;
  */
 public interface FileRegisterService {
 
-  public Tuple2<String, String> register(File file);
+  public Tuple2<String, String> register(File file, boolean isZip);
+
+  public Tuple2<String, String> register(MultipartFile multipartFile);
 }
