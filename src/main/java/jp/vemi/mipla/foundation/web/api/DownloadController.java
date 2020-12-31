@@ -3,6 +3,7 @@
  */
 package jp.vemi.mipla.foundation.web.api;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -128,15 +129,16 @@ public class DownloadController {
         }
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        // Vue.js がわのデコード時コントロールに未対応。。
-        // response.addHeader("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName);
         response.addHeader("Content-Disposition", "attachment; filename=" + encodedFileName);
 
         if(paths.size() > 1) {
             try (ZipOutputStream zostream = new ZipOutputStream(response.getOutputStream())) {
                 for (final Tuple3<String, String, Path> item : apiResp.model.paths) {
-                    final ZipEntry entry = new ZipEntry(item.getThird().toFile().getAbsolutePath());
+                    File entryFile = item.getThird().toFile();
+                    final ZipEntry entry = new ZipEntry(
+                            new File(entryFile.getParent()).getName() + "-" + item.getSecond());
                     zostream.putNextEntry(entry);
+                    zostream.write(Files.readAllBytes(item.getThird()));
                 }
             } catch (final IOException e) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
