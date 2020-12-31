@@ -36,10 +36,8 @@ public class FileRegisterServiceImpl implements FileRegisterService {
   public Tuple2<String, String> register(MultipartFile multipartFile) {
     String temporaryUuid = UUID.randomUUID().toString();
     File temporary = new File(System.getProperty("java.io.tmpdir") + "/ProMarker/" + temporaryUuid);
-
-    FileUtil.transfer(multipartFile, temporary, multipartFile.getOriginalFilename());
-
-    return register(temporary, false);
+    FileUtil.transfer(multipartFile, temporary, ATCH_FILE_NAME);
+    return register(temporary, false, multipartFile.getOriginalFilename());
   }
 
   /**
@@ -47,6 +45,14 @@ public class FileRegisterServiceImpl implements FileRegisterService {
    */
   @Override
   public Tuple2<String, String> register(File srcFile, boolean isZip) {
+    return register(srcFile, isZip, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Tuple2<String, String> register(File srcFile, boolean isZip, String fileName) {
 
     String uuid = UUID.randomUUID().toString();
 
@@ -61,21 +67,23 @@ public class FileRegisterServiceImpl implements FileRegisterService {
       if (false == FileUtil.zip(srcFile, dest, ATCH_FILE_NAME)) {
         // error... failed archive file...
       }
+      fileName = srcFile.getName() + ".zip";
     } else {
       FileUtil.copy(srcFile, destFile);
     }
 
-    String fileName = srcFile.getName() + ".zip"; // ･･･きも･･･
+    if (StringUtils.isEmpty(fileName)) {
+      fileName = ATCH_FILE_NAME;
+    }
+
     // create entity.
     FileManagement fileManagement = new FileManagement();
     fileManagement.fileId = uuid;
     fileManagement.fileName = fileName;
     fileManagement.filePath = dest + "\\" + ATCH_FILE_NAME;
     fileManagement.expireDate = DateUtils.addDays(new Date(), defaultExpireTerms());
-
     fileManagementRepository.save(fileManagement);
-
-    return new Tuple2<String, String>(uuid, fileName);
+    return new Tuple2<>(uuid, fileName);
 
   }
 

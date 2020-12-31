@@ -17,4 +17,7 @@ public interface FileRegisterService {
   public Tuple2<String, String> register(File file, boolean isZip);
 
   public Tuple2<String, String> register(MultipartFile multipartFile);
+
+  public Tuple2<String, String> register(File srcFile, boolean isZip, String fileName);
+
 }
