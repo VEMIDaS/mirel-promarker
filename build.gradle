@@ -48,6 +48,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.8.0'
 	implementation 'org.freemarker:freemarker:2.3.30'
 	implementation 'javax.validation:validation-api:2.0.1.Final'
+	implementation 'com.codeborne:selenide:5.17.2'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
