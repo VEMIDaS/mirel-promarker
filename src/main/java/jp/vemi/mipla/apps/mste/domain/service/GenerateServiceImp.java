@@ -56,21 +56,6 @@ public class GenerateServiceImp implements GenerateService{
         parameter.getModel().params.stream().forEach(item -> {
 
             Map<String, Object> once = InstanceUtil.forceCast(item.get("content"));
-
-            // FIXME ステンシル定義からファイルIDタイプのものを取得する
-            Object fileIdObj = once.get("cdmaster");
-            if (null != fileIdObj) {
-                String fileId = fileIdObj.toString();
-                if (false == StringUtils.isEmpty(fileId)) {
-                    try {
-                        once.putAll(file(fileId, resp));
-                    } catch(Throwable e) {
-                        e.printStackTrace();
-                        resp.errs.add(e.getLocalizedMessage());
-                        return;
-                    }
-                }
-            }
             List<String> errs = validate(once);
             if(false == CollectionUtils.isEmpty(errs)) {
                 // has err
@@ -78,16 +63,46 @@ public class GenerateServiceImp implements GenerateService{
                 return;
             }
 
+            // prepare.
+            LogicTemplateEngine engine = LogicTemplateEngine.create(
+                    SteContext.newSteContext(once));
+            List<Map<String, Object>> delements = engine.getStencilSettings().getStencilDeAndDd();
+            for (Map<String, Object> delement : delements) {
+                Object typeObject = delement.get("type");
+                if (null == typeObject || false == typeObject instanceof String) {
+                    // タイプの宣言が不正なので処理しない
+                    continue;
+                }
+                String type = InstanceUtil.forceCast(typeObject);
+                if (false == "file".equals(type)) {
+                    // ファイルでないので処理しない
+                    continue;
+                }
+                Object valueObject = delement.get("value");
+                if (null == valueObject || false == valueObject instanceof String) {
+                    // バリューの宣言が不正なので処理しない
+                    continue;
+                }
+                String value = InstanceUtil.forceCast(valueObject);
+
+                try {
+                    engine.appendContext(file(value, resp));
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    resp.errs.add(e.getLocalizedMessage());
+                    return;
+                }
+            }
+
             // create.
             String filePath;
             try{
-                filePath = LogicTemplateEngine.create(
-                    SteContext.newSteContext(once)).execute();
+                filePath = engine.execute();
             } catch(MessagingException e) {
                 e.printStackTrace();
                 resp.errs.addAll(e.messages);
                 return;
-            } catch(Throwable e) {
+            } catch(Exception e) {
                 e.printStackTrace();
                 resp.errs.add(e.getLocalizedMessage());
                 return;

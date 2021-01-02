@@ -298,6 +298,15 @@ public class LogicTemplateEngine {
     }
 
     /**
+     * Append context.
+     * 
+     * @param bind
+     */
+    public void appendContext(Map<String, Object> bind) {
+        this.context.putAll(bind);
+    }
+
+    /**
      * 共通バインドを構築します。<br/>
      */
     protected void prepareBind() {

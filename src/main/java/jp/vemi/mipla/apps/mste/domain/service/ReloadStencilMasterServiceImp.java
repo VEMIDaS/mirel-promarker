@@ -6,6 +6,7 @@ package jp.vemi.mipla.apps.mste.domain.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,6 +14,7 @@ import java.util.Map.Entry;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ import jp.vemi.mipla.apps.mste.domain.dao.entity.MsteStencil;
 import jp.vemi.mipla.apps.mste.domain.dao.repository.MsteStencilRepository;
 import jp.vemi.mipla.apps.mste.domain.dto.ReloadStencilMasterParameter;
 import jp.vemi.mipla.apps.mste.domain.dto.ReloadStencilMasterResult;
+import jp.vemi.mipla.foundation.abst.dao.entity.FileManagement;
+import jp.vemi.mipla.foundation.abst.dao.repository.FileManagementRepository;
 import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
 import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
 import jp.vemi.ste.domain.dto.yml.StencilSettingsYml;
@@ -46,6 +50,9 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
     @Autowired
     protected MsteStencilRepository stencilRepository;
 
+    @Autowired
+    protected FileManagementRepository fileManagementRepository;
+  
     /**
      * {@inheritDoc}
      */
@@ -104,6 +111,26 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
         entry.setSort(0);
         stencilRepository.save(entry);
         }
+
+        String fileDir = dir + "/_filemanagement";
+        File[] filemanagementFiles = new File(fileDir).listFiles();
+        for(File file: filemanagementFiles) {
+            File[] filesInUuid = file.listFiles();
+
+            if (0 == filesInUuid.length) {
+                continue;
+            }
+
+            // create entity.
+            FileManagement fileManagement = new FileManagement();
+            fileManagement.fileId = file.getName();
+            fileManagement.fileName = filesInUuid[0].getName();
+            fileManagement.filePath = filesInUuid[0].getAbsolutePath();
+            fileManagement.expireDate = DateUtils.addDays(new Date(), 3650);
+            fileManagementRepository.save(fileManagement);
+
+        }
+
     }
 
     /**
