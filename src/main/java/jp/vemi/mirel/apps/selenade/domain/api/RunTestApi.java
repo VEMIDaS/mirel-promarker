@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2015-2021 mirelplatform.
+ * Copyright(c) 2015-2021 vemi/mirelplatform.
  */
 package jp.vemi.mirel.apps.selenade.domain.api;
 
