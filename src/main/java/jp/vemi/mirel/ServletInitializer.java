@@ -1,4 +1,4 @@
-package jp.vemi.mipla;
+package jp.vemi.mirel;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

@@ -1,4 +1,4 @@
-package jp.vemi.mipla;
+package jp.vemi.mirel;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

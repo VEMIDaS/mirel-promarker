@@ -1,4 +1,4 @@
-package jp.vemi.mipla;
+package jp.vemi.mirel;
 
 
 import javax.servlet.MultipartConfigElement;
