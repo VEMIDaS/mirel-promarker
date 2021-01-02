@@ -28,7 +28,7 @@ import jp.vemi.mirel.foundation.feature.files.service.FileRegisterService;
 import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
 import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 import jp.vemi.ste.domain.context.SteContext;
-import jp.vemi.ste.domain.engine.LogicTemplateEngine;
+import jp.vemi.ste.domain.engine.TemplateEngineProcessor;
 import jp.vemi.ste.domain.engine.StructureReader;
 
 /**
@@ -64,7 +64,7 @@ public class GenerateServiceImp implements GenerateService{
             }
 
             // prepare.
-            LogicTemplateEngine engine = LogicTemplateEngine.create(
+            TemplateEngineProcessor engine = TemplateEngineProcessor.create(
                     SteContext.newSteContext(once));
             List<Map<String, Object>> delements = engine.getStencilSettings().getStencilDeAndDd();
             for (Map<String, Object> delement : delements) {

@@ -54,7 +54,7 @@ import jp.vemi.ste.domain.dto.yml.StencilSettingsYml;
  * @author mirelplatform
  *
  */
-public class LogicTemplateEngine {
+public class TemplateEngineProcessor {
 
     /**
      * 共通バインド
@@ -68,15 +68,15 @@ public class LogicTemplateEngine {
     protected static final String REGEX = "[0-9]{6}[A-Z]+";
     protected boolean isLegacy = true;
 
-    protected static Logger logger = Logger.getLogger(LogicTemplateEngine.class.getName());
+    protected static Logger logger = Logger.getLogger(TemplateEngineProcessor.class.getName());
 
     /**
      * default constructor.
      * @param context {@link SteContext}
      * @return instance
      */
-    public static LogicTemplateEngine create(final SteContext context) {
-        final LogicTemplateEngine instance = new LogicTemplateEngine();
+    public static TemplateEngineProcessor create(final SteContext context) {
+        final TemplateEngineProcessor instance = new TemplateEngineProcessor();
 
         // context.
         instance.context = context;
@@ -97,7 +97,7 @@ public class LogicTemplateEngine {
      * default constructor.
      * @return instance
      */
-    public static LogicTemplateEngine create() {
+    public static TemplateEngineProcessor create() {
         return create(SteContext.standard());
     }
 

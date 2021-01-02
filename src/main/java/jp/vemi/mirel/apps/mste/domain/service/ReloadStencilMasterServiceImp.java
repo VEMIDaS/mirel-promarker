@@ -37,7 +37,7 @@ import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
 import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 import jp.vemi.ste.domain.dto.yml.StencilSettingsYml;
 import jp.vemi.ste.domain.dto.yml.StencilSettingsYml.Stencil.Config;
-import jp.vemi.ste.domain.engine.LogicTemplateEngine;
+import jp.vemi.ste.domain.engine.TemplateEngineProcessor;
 
 /**
  * {@link ReloadStencilMasterService ステンシルマスタの更新} の具象です。
@@ -76,7 +76,7 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
         stencilRepository.deleteAll();
 
         // road stencil settings.
-        String dir = StorageUtil.getBaseDir() + LogicTemplateEngine.getStencilMasterStorageDir();
+        String dir = StorageUtil.getBaseDir() + TemplateEngineProcessor.getStencilMasterStorageDir();
         List<String> files = FileUtil.findByFileName(dir, "stencil-settings.yml");
         Map<String, String> categories = Maps.newLinkedHashMap();
 

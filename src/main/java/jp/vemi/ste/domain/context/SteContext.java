@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import jp.vemi.framework.exeption.MirelApplicationException;
 import jp.vemi.framework.util.InstanceUtil;
 import jp.vemi.framework.util.StringConvertionUtil;
+import jp.vemi.ste.domain.engine.TemplateEngineProcessor;
 
 /**
  * STEコンテキスト
@@ -41,7 +42,9 @@ public abstract class SteContext extends LinkedHashMap<String, Object> {
     }
 
     public static <T extends SteContext> SteContext standard(){
-         return of(DefaultSteContext.class);
+        SteContext ctx = of(DefaultSteContext.class);
+        ctx.put("generator", TemplateEngineProcessor.class.getName());
+        return ctx;
     }
 
     public static SteContext standard(String stencilName) {

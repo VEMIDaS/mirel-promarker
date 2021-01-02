@@ -57,7 +57,7 @@ public class SteExecutor {
             }
 
             SteContext context = SteContext.newSteContext(map);
-            String result = LogicTemplateEngine.create(context).execute();
+            String result = TemplateEngineProcessor.create(context).execute();
             results.add(result);
         }
 

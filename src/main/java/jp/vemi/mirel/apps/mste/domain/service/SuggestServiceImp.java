@@ -35,7 +35,7 @@ import jp.vemi.mirel.foundation.web.model.ValueText;
 import jp.vemi.mirel.foundation.web.model.ValueTextItems;
 import jp.vemi.ste.domain.context.SteContext;
 import jp.vemi.ste.domain.dto.yml.StencilSettingsYml;
-import jp.vemi.ste.domain.engine.LogicTemplateEngine;
+import jp.vemi.ste.domain.engine.TemplateEngineProcessor;
 
 /**
  * {@link SuggestService} の具象です。
@@ -77,9 +77,9 @@ public class SuggestServiceImp implements SuggestService {
             return new ApiResponse<>(resultModel);
         }
 
-        LogicTemplateEngine engine;
+        TemplateEngineProcessor engine;
         try {
-            engine = LogicTemplateEngine.create(SteContext.standard(stencilCd, parameter.getModel().serialNo));
+            engine = TemplateEngineProcessor.create(SteContext.standard(stencilCd, parameter.getModel().serialNo));
         } catch (Throwable e) {
             e.printStackTrace();
             throw e;
