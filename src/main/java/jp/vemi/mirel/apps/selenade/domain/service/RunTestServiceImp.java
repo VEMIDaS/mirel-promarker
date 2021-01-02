@@ -3,12 +3,13 @@
  */
 package jp.vemi.mirel.apps.selenade.domain.service;
 
+import javax.annotation.Generated;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestParameter;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestResult;
-import jp.vemi.mirel.apps.selenade.domain.service.RunTestService;
 import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
 import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
@@ -17,7 +18,8 @@ import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
  */
 @Service
 @Transactional
-public class RunTestServiceImp implements RunTestService{
+@Generated(value = {"jp.vemi.ste.domain.engine.TemplateEngineProcessor"}, comments = "Generated from /mirel/service:191207A")
+public class RunTestServiceImp implements RunTestService {
 
     /**
      * {@inheritDoc}
