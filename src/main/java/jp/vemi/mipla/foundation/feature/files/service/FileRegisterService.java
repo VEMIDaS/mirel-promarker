@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All right reserved.
  */
-package jp.vemi.mipla.foundation.feature.files.service;
+package jp.vemi.mirel.foundation.feature.files.service;
 
 import java.io.File;
 

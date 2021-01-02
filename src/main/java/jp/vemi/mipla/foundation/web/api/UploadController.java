@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.foundation.web.api;
+package jp.vemi.mirel.foundation.web.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import groovy.lang.Tuple2;
-import jp.vemi.mipla.foundation.feature.files.dto.FileUploadResult;
-import jp.vemi.mipla.foundation.feature.files.service.FileRegisterService;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.foundation.feature.files.dto.FileUploadResult;
+import jp.vemi.mirel.foundation.feature.files.service.FileRegisterService;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 /**
  * アップロードコントローラ.<br/>

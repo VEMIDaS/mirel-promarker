@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All Right Reserved.
  */
-package jp.vemi.mipla.apps.mste.domain.api;
+package jp.vemi.mirel.apps.mste.domain.api;
 
 import java.util.Map;
 
@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.vemi.framework.util.InstanceUtil;
-import jp.vemi.mipla.apps.mste.domain.dto.SuggestParameter;
-import jp.vemi.mipla.apps.mste.domain.dto.SuggestResult;
-import jp.vemi.mipla.apps.mste.domain.service.SuggestService;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.apps.mste.domain.dto.SuggestParameter;
+import jp.vemi.mirel.apps.mste.domain.dto.SuggestResult;
+import jp.vemi.mirel.apps.mste.domain.service.SuggestService;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 /**
  * .<br/>

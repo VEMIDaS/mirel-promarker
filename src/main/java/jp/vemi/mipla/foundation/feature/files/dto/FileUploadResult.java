@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.foundation.feature.files.dto;
+package jp.vemi.mirel.foundation.feature.files.dto;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import groovy.lang.Tuple3;
-import jp.vemi.mipla.foundation.abst.dto.ServiceResult;
+import jp.vemi.mirel.foundation.abst.dto.ServiceResult;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

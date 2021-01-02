@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All Right Reserved.
  */
-package jp.vemi.mipla.apps.mste.domain.dao.entity;
+package jp.vemi.mirel.apps.mste.domain.dao.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,12 +1,12 @@
 /*
  * Copyright(c) 2019 mirelplatform All right reserved.
  */
-package jp.vemi.mipla.apps.mste.domain.service;
+package jp.vemi.mirel.apps.mste.domain.service;
 
-import jp.vemi.mipla.apps.mste.domain.dto.SuggestParameter;
-import jp.vemi.mipla.apps.mste.domain.dto.SuggestResult;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.apps.mste.domain.dto.SuggestParameter;
+import jp.vemi.mirel.apps.mste.domain.dto.SuggestResult;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 /**
  * MSTEサジェスト .<br/>

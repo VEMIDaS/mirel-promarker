@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All right reserved.
  */
-package jp.vemi.mipla.apps.mste.domain.dao.repository;
+package jp.vemi.mirel.apps.mste.domain.dao.repository;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import jp.vemi.mipla.apps.mste.domain.dao.entity.MsteStencil;
+import jp.vemi.mirel.apps.mste.domain.dao.entity.MsteStencil;
 
 /**
  * {@link MsteStencil} のrepositoryです。

@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.apps.mste.domain.service;
+package jp.vemi.mirel.apps.mste.domain.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,14 +27,14 @@ import jp.vemi.framework.exeption.MirelApplicationException;
 import jp.vemi.framework.exeption.MirelSystemException;
 import jp.vemi.framework.util.FileUtil;
 import jp.vemi.framework.util.StorageUtil;
-import jp.vemi.mipla.apps.mste.domain.dao.entity.MsteStencil;
-import jp.vemi.mipla.apps.mste.domain.dao.repository.MsteStencilRepository;
-import jp.vemi.mipla.apps.mste.domain.dto.ReloadStencilMasterParameter;
-import jp.vemi.mipla.apps.mste.domain.dto.ReloadStencilMasterResult;
-import jp.vemi.mipla.foundation.abst.dao.entity.FileManagement;
-import jp.vemi.mipla.foundation.abst.dao.repository.FileManagementRepository;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.apps.mste.domain.dao.entity.MsteStencil;
+import jp.vemi.mirel.apps.mste.domain.dao.repository.MsteStencilRepository;
+import jp.vemi.mirel.apps.mste.domain.dto.ReloadStencilMasterParameter;
+import jp.vemi.mirel.apps.mste.domain.dto.ReloadStencilMasterResult;
+import jp.vemi.mirel.foundation.abst.dao.entity.FileManagement;
+import jp.vemi.mirel.foundation.abst.dao.repository.FileManagementRepository;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 import jp.vemi.ste.domain.dto.yml.StencilSettingsYml;
 import jp.vemi.ste.domain.dto.yml.StencilSettingsYml.Stencil.Config;
 import jp.vemi.ste.domain.engine.LogicTemplateEngine;

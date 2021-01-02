@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.foundation.web.api;
+package jp.vemi.mirel.foundation.web.api;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,11 +37,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import groovy.lang.Tuple3;
 import jp.vemi.framework.util.InstanceUtil;
-import jp.vemi.mipla.foundation.feature.files.service.FileDownloadService;
-import jp.vemi.mipla.foundation.feature.files.dto.FileDownloadParameter;
-import jp.vemi.mipla.foundation.feature.files.dto.FileDownloadResult;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.foundation.feature.files.service.FileDownloadService;
+import jp.vemi.mirel.foundation.feature.files.dto.FileDownloadParameter;
+import jp.vemi.mirel.foundation.feature.files.dto.FileDownloadResult;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 /**
  * .<br/>

@@ -1,15 +1,15 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.apps.mste.domain.service;
+package jp.vemi.mirel.apps.mste.domain.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jp.vemi.mipla.apps.mste.domain.dto.UploadStencilParameter;
-import jp.vemi.mipla.apps.mste.domain.dto.UploadStencilResult;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.apps.mste.domain.dto.UploadStencilParameter;
+import jp.vemi.mirel.apps.mste.domain.dto.UploadStencilResult;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 /**
  * {@link UploadStencilService} の具象です。

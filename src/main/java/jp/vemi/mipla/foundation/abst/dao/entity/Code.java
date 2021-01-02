@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.foundation.abst.dao.entity;
+package jp.vemi.mirel.foundation.abst.dao.entity;
 
 import java.io.Serializable;
 

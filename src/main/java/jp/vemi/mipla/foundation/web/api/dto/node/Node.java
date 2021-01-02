@@ -1,11 +1,11 @@
-package jp.vemi.mipla.foundation.web.api.dto.node;
+package jp.vemi.mirel.foundation.web.api.dto.node;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import jp.vemi.mipla.foundation.web.api.types.NodeType;
+import jp.vemi.mirel.foundation.web.api.types.NodeType;
 
 public abstract class Node {
 

@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.apps.mste.application.controller;
+package jp.vemi.mirel.apps.mste.application.controller;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jp.vemi.mipla.apps.mste.domain.api.MsteApi;
-import jp.vemi.mipla.apps.mste.domain.service.GenerateService;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.apps.mste.domain.api.MsteApi;
+import jp.vemi.mirel.apps.mste.domain.service.GenerateService;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 @RestController
 @RequestMapping("apps/mste/api")

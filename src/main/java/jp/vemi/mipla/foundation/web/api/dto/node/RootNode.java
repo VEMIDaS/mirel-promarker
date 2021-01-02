@@ -1,7 +1,7 @@
-package jp.vemi.mipla.foundation.web.api.dto.node;
+package jp.vemi.mirel.foundation.web.api.dto.node;
 
 
-import jp.vemi.mipla.foundation.web.api.types.NodeType;
+import jp.vemi.mirel.foundation.web.api.types.NodeType;
 
 public class RootNode extends Node {
 

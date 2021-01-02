@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.apps.mste.domain.dto;
+package jp.vemi.mirel.apps.mste.domain.dto;
 
 import java.util.List;
 import java.util.Map;

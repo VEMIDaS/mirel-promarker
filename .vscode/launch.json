@@ -6,7 +6,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "mainClass": "jp.vemi.mipla.MiplaApplication",
+            "mainClass": "jp.vemi.mirel.MiplaApplication",
             "projectName": "promarker",
             "args": ""
         }

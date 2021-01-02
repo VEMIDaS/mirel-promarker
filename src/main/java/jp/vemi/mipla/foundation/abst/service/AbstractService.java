@@ -1,12 +1,12 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.foundation.abst.service;
+package jp.vemi.mirel.foundation.abst.service;
 
-import jp.vemi.mipla.foundation.abst.dto.ServiceParameter;
-import jp.vemi.mipla.foundation.abst.dto.ServiceResult;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.foundation.abst.dto.ServiceParameter;
+import jp.vemi.mirel.foundation.abst.dto.ServiceResult;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 /**
  * service

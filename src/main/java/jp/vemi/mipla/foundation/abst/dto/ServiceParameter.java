@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.foundation.abst.dto;
+package jp.vemi.mirel.foundation.abst.dto;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

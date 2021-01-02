@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.apps.mste.domain.service;
+package jp.vemi.mirel.apps.mste.domain.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,17 +22,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import jp.vemi.mipla.apps.mste.domain.dao.entity.MsteStencil;
-import jp.vemi.mipla.apps.mste.domain.dao.repository.MsteStencilRepository;
-import jp.vemi.mipla.apps.mste.domain.dto.SuggestParameter;
-import jp.vemi.mipla.apps.mste.domain.dto.SuggestResult;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
-import jp.vemi.mipla.foundation.web.api.dto.node.Node;
-import jp.vemi.mipla.foundation.web.api.dto.node.RootNode;
-import jp.vemi.mipla.foundation.web.api.dto.node.StencilParameterPrototypeNode;
-import jp.vemi.mipla.foundation.web.model.ValueText;
-import jp.vemi.mipla.foundation.web.model.ValueTextItems;
+import jp.vemi.mirel.apps.mste.domain.dao.entity.MsteStencil;
+import jp.vemi.mirel.apps.mste.domain.dao.repository.MsteStencilRepository;
+import jp.vemi.mirel.apps.mste.domain.dto.SuggestParameter;
+import jp.vemi.mirel.apps.mste.domain.dto.SuggestResult;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.foundation.web.api.dto.node.Node;
+import jp.vemi.mirel.foundation.web.api.dto.node.RootNode;
+import jp.vemi.mirel.foundation.web.api.dto.node.StencilParameterPrototypeNode;
+import jp.vemi.mirel.foundation.web.model.ValueText;
+import jp.vemi.mirel.foundation.web.model.ValueTextItems;
 import jp.vemi.ste.domain.context.SteContext;
 import jp.vemi.ste.domain.dto.yml.StencilSettingsYml;
 import jp.vemi.ste.domain.engine.LogicTemplateEngine;

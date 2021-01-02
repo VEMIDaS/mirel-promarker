@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.foundation.feature.files.service;
+package jp.vemi.mirel.foundation.feature.files.service;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import groovy.lang.Tuple3;
-import jp.vemi.mipla.foundation.abst.dao.entity.FileManagement;
-import jp.vemi.mipla.foundation.abst.dao.repository.FileManagementRepository;
-import jp.vemi.mipla.foundation.feature.files.dto.FileDownloadParameter;
-import jp.vemi.mipla.foundation.feature.files.dto.FileDownloadResult;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.foundation.abst.dao.entity.FileManagement;
+import jp.vemi.mirel.foundation.abst.dao.repository.FileManagementRepository;
+import jp.vemi.mirel.foundation.feature.files.dto.FileDownloadParameter;
+import jp.vemi.mirel.foundation.feature.files.dto.FileDownloadResult;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 /**
  * {@link FileDownloadService} の具象です。 .<br/>

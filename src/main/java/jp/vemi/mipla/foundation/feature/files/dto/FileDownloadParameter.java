@@ -1,11 +1,11 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.foundation.feature.files.dto;
+package jp.vemi.mirel.foundation.feature.files.dto;
 
 import java.util.List;
 
-import jp.vemi.mipla.foundation.abst.dto.ServiceParameter;
+import jp.vemi.mirel.foundation.abst.dto.ServiceParameter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

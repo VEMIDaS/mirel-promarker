@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All right reserved.
  */
-package jp.vemi.mipla.apps.mste.domain.dto;
+package jp.vemi.mirel.apps.mste.domain.dto;
 
 public class SuggestParameter {
 

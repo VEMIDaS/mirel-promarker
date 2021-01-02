@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All right reserved.
  */
-package jp.vemi.mipla.foundation.abst.dao.entity;
+package jp.vemi.mirel.foundation.abst.dao.entity;
 
 import java.util.Date;
 

@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All Right Reserved.
  */
-package jp.vemi.mipla.foundation.web.api.types;
+package jp.vemi.mirel.foundation.web.api.types;
 
 /**
  * ノードの列挙です。 .<br/>

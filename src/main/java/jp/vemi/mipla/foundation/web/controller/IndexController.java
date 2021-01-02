@@ -1,4 +1,4 @@
-package jp.vemi.mipla.foundation.web.controller;
+package jp.vemi.mirel.foundation.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

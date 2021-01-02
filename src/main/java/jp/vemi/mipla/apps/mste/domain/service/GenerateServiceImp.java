@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All right reserved.
  */
-package jp.vemi.mipla.apps.mste.domain.service;
+package jp.vemi.mirel.apps.mste.domain.service;
 
 import java.io.File;
 import java.util.List;
@@ -20,13 +20,13 @@ import org.springframework.util.StringUtils;
 import groovy.lang.Tuple2;
 import jp.vemi.framework.exeption.MessagingException;
 import jp.vemi.framework.util.InstanceUtil;
-import jp.vemi.mipla.apps.mste.domain.dto.GenerateParameter;
-import jp.vemi.mipla.apps.mste.domain.dto.GenerateResult;
-import jp.vemi.mipla.foundation.abst.dao.entity.FileManagement;
-import jp.vemi.mipla.foundation.abst.dao.repository.FileManagementRepository;
-import jp.vemi.mipla.foundation.feature.files.service.FileRegisterService;
-import jp.vemi.mipla.foundation.web.api.dto.ApiRequest;
-import jp.vemi.mipla.foundation.web.api.dto.ApiResponse;
+import jp.vemi.mirel.apps.mste.domain.dto.GenerateParameter;
+import jp.vemi.mirel.apps.mste.domain.dto.GenerateResult;
+import jp.vemi.mirel.foundation.abst.dao.entity.FileManagement;
+import jp.vemi.mirel.foundation.abst.dao.repository.FileManagementRepository;
+import jp.vemi.mirel.foundation.feature.files.service.FileRegisterService;
+import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
+import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 import jp.vemi.ste.domain.context.SteContext;
 import jp.vemi.ste.domain.engine.LogicTemplateEngine;
 import jp.vemi.ste.domain.engine.StructureReader;

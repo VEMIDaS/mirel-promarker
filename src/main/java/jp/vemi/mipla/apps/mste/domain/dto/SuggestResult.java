@@ -1,12 +1,12 @@
 /*
  * Copyright(c) 2015-2020 mirelplatform.
  */
-package jp.vemi.mipla.apps.mste.domain.dto;
+package jp.vemi.mirel.apps.mste.domain.dto;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import jp.vemi.mipla.foundation.web.api.dto.node.Node;
-import jp.vemi.mipla.foundation.web.model.ValueTextItems;
+import jp.vemi.mirel.foundation.web.api.dto.node.Node;
+import jp.vemi.mirel.foundation.web.model.ValueTextItems;
 import jp.vemi.ste.domain.dto.yml.StencilSettingsYml;
 
 /**

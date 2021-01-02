@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 mirelplatform All right reserved.
  */
-package jp.vemi.mipla.foundation.feature.files.service;
+package jp.vemi.mirel.foundation.feature.files.service;
 
 import java.io.File;
 import java.util.Date;
@@ -18,8 +18,8 @@ import groovy.lang.Tuple2;
 import jp.vemi.framework.util.DateUtil;
 import jp.vemi.framework.util.FileUtil;
 import jp.vemi.framework.util.StorageUtil;
-import jp.vemi.mipla.foundation.abst.dao.entity.FileManagement;
-import jp.vemi.mipla.foundation.abst.dao.repository.FileManagementRepository;
+import jp.vemi.mirel.foundation.abst.dao.entity.FileManagement;
+import jp.vemi.mirel.foundation.abst.dao.repository.FileManagementRepository;
 
 /**
  * {@link FileRegisterService} の具象です。 .<br/>
