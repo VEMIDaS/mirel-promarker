@@ -19,7 +19,7 @@ import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
  * テスト実行.<br/>
  */
 @Service
-public class RunTestApi {
+public class RunTestApi implements SelenadeApi {
 
     @Autowired
     protected RunTestService service;

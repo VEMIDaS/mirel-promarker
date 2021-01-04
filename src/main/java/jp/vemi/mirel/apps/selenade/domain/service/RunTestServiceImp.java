@@ -8,6 +8,7 @@ import javax.annotation.Generated;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jp.vemi.mirel.apps.selenade.agent.SelenideAgent;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestParameter;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestResult;
 import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
@@ -29,10 +30,15 @@ public class RunTestServiceImp implements RunTestService {
 
         ApiResponse<RunTestResult> resp = ApiResponse.<RunTestResult>builder().build();
 
-        // TODO implementation.
         resp.setModel(RunTestResult.builder().build());
-
+        exec();
         return resp;
 
     }
+
+    protected void exec() {
+        SelenideAgent agent = new SelenideAgent();
+        // TODO implementation.
+    }
+
 }
