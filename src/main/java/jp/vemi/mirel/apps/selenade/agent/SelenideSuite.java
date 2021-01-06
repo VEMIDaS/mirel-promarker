@@ -20,6 +20,8 @@ import lombok.Setter;
 /**
  * Selenade の Suite を管理するオブジェクトです。
  */
+@Getter
+@Setter
 public class SelenideSuite {
 
     final SelenideConfig config;
@@ -51,8 +53,10 @@ public class SelenideSuite {
      */
     @Setter
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Scenario extends AbstractInSuite {
+        long sort;
+        List<Usecase> usecases = Lists.newArrayList();
     }
 
     /**
@@ -62,6 +66,7 @@ public class SelenideSuite {
     @Getter
     @NoArgsConstructor
     public static class Usecase extends AbstractInSuite {
+        long sort;
         List<Action> actions = Lists.newArrayList();
     }
 
@@ -72,6 +77,7 @@ public class SelenideSuite {
     @Getter
     @NoArgsConstructor
     public static class Action extends AbstractInSuite {
+        long sort;
         ActionType actionType;
         Map<String, Object> actionParameter;
 
@@ -100,5 +106,9 @@ public class SelenideSuite {
         }
     }
 
+    public void sort() {
+        // TODO impl.
+        return;
+    }
 
 }
