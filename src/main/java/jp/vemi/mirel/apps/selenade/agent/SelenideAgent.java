@@ -5,6 +5,7 @@ package jp.vemi.mirel.apps.selenade.agent;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
@@ -23,20 +24,30 @@ public class SelenideAgent {
      */
     public void invoke(SelenideSuite suite) {
 
+        suite.sort();
+
         SelenideDriver driver = new SelenideDriver(suite.config);
-        driver.open("/");
+
+        for (Map.Entry<String, SelenideSuite.Scenario> scenarioEntry : suite.getScenarios().entrySet()) {
+            SelenideSuite.Scenario scenario = scenarioEntry.getValue(); 
+            for (SelenideSuite.Usecase usecase : scenario.usecases) {
+                for (SelenideSuite.Action action : usecase.actions) {
+                    action(action.actionType, action.getActionParameter());
+                }
+            }
+        }
         driver.screenshot("file.jpg");
         driver.close();
     }
 
-    protected void action(SelenideSuite.Action.ActionType actionType, Object... params) {
+    protected void action(SelenideSuite.Action.ActionType actionType, Map<String, Object> parameter) {
 
         // common validate.
-        isValidArgsCount(actionType, params);
+        isValidArgsCount(actionType, parameter);
 
         switch(actionType) {
             case OPEN:
-                open(asString(params[0]));
+                open(parameter);
                 return;
             case FIND:
                 return;
@@ -59,12 +70,12 @@ public class SelenideAgent {
         }
     }
 
-    protected void open(String url) {
+    protected void open(Map<String, Object> parameter) {
         // TODO implementation
     }
 
-    protected boolean isValidArgsCount(SelenideSuite.Action.ActionType actionType, Object... params) {
-        return actionType.argNum == params.length;
+    protected boolean isValidArgsCount(SelenideSuite.Action.ActionType actionType, Map<String, Object> parameter) {
+        return actionType.argNum == parameter.size();
     }
 
     protected boolean isValidString(Object object) {

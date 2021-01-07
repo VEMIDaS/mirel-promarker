@@ -4,15 +4,18 @@
 package jp.vemi.mirel.apps.selenade.agent;
 
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.codeborne.selenide.SelenideConfig;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.compress.utils.Lists;
+import org.springframework.util.CollectionUtils;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -77,38 +80,115 @@ public class SelenideSuite {
     @Getter
     @NoArgsConstructor
     public static class Action extends AbstractInSuite {
+        /**
+         * Sort no.
+         * <p>
+         * Necessary to sort yourself.
+         * </p>
+         */
         long sort;
+
+        /**
+         * action type.
+         */
         ActionType actionType;
+
+        /**
+         * parameter.
+         * <p>
+         * key/value of parameter.
+         * </p>
+         */
         Map<String, Object> actionParameter;
 
+        /**
+         * Enumeration of action type.
+         */
         public enum ActionType {
             /** 開く */
-            OPEN(1),
+            OPEN("open"),
             /** タイトル */
-            TITLE(0),
+            TITLE("title"),
             /** FIND */
-            FIND(-1),
+            FIND("find"),
             /** FINDALL */
-            FINDALL(-1),
+            FINDALL("findAll"),
             /** クリック */
-            CLICK(0),
+            CLICK("click"),
             /**  */
-            GET_SELECTED_RADIO(1),
+            GET_SELECTED_RADIO("getSelectedRadio"),
             /** QUERY */
-            QUERY(1),
+            QUERY("query"),
             ;
 
-            Integer argNum;
-
-            ActionType(Integer argNum) {
-                this.argNum = argNum;
+            /**
+             * Parameter define.
+             */
+            static Map<ActionType, Map<Long, Set<String>>> PARAM_DEF;
+            static {
+                PARAM_DEF = Maps.newLinkedHashMap();
+                PARAM_DEF.put(OPEN, newParameterDefine(1, "url"));
+                PARAM_DEF.put(TITLE, newParameterDefine(1));
+                PARAM_DEF.put(FIND, newParameterDefine(1, "pageObjectAccessor"));
+                PARAM_DEF.put(FINDALL, newParameterDefine(1, "pageObjectAccessor"));
+                PARAM_DEF.put(CLICK, newParameterDefine(1, "pageObjectAccessor"));
+                PARAM_DEF.put(GET_SELECTED_RADIO, newParameterDefine(0));
+                PARAM_DEF.put(QUERY, newParameterDefine(0));
             }
+
+            /**
+             * Name of action.
+             */
+            String name;
+
+            /**
+             * Default constructor.
+             */
+            ActionType(String name) {
+                this.name = name;
+            }
+
+            /* utility */
+
+            /**
+             * newParameterDefine
+             */
+            public static Map<Long, Set<String>> newParameterDefine(long numberOfParameters, String... parameters) {
+                if (numberOfParameters != parameters.length) {
+                    throw new IllegalArgumentException("expect parameter count is " + numberOfParameters + ", but " + parameters.length);
+                }
+                Map<Long, Set<String>> map = Maps.newLinkedHashMap();
+                Set<String> set = Sets.newLinkedHashSet();
+                if (0 < parameters.length) {
+                    set.addAll(Arrays.asList(parameters));
+                }
+                map.put(numberOfParameters, set);
+                return map;
+            }
+        
         }
     }
 
     public void sort() {
         // TODO impl.
         return;
+    }
+
+    public static List<String> validate(Action action) {
+        List<String> messages = Lists.newArrayList();
+
+        if (null == action.getActionType()) {
+            messages.add("actionType is not declared.");
+        }
+
+        // valid arguments.
+
+        // no args.
+        if (action.getActionType().argNum.equals(0) && false == CollectionUtils.isEmpty(action.getActionParameter())) {
+            messages.add("actionType is " + action.getActionType() + " but argument is  declared.");
+        }
+        
+        return messages;
     }
 
 }
