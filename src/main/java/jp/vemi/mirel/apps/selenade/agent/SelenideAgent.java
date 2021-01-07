@@ -74,10 +74,6 @@ public class SelenideAgent {
         // TODO implementation
     }
 
-    protected boolean isValidArgsCount(SelenideSuite.Action.ActionType actionType, Map<String, Object> parameter) {
-        return actionType.argNum == parameter.size();
-    }
-
     protected boolean isValidString(Object object) {
         return object instanceof String;
     }

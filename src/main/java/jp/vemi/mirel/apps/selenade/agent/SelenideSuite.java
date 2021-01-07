@@ -16,6 +16,7 @@ import com.google.common.collect.Sets;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.util.CollectionUtils;
 
+import jp.vemi.framework.exeption.MirelApplicationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -148,12 +149,26 @@ public class SelenideSuite {
                 this.name = name;
             }
 
+            public Set<String> getParameterDefine(ActionType actionType, long numberOfParameters) {
+                Map<Long, Set<String>> map = PARAM_DEF.get(actionType);
+                if (CollectionUtils.isEmpty(map)) {
+                    throw new MirelApplicationException();
+                    // TODO msg: incorrect action.
+                }
+                Set<String> set = map.get(numberOfParameters);
+                if (CollectionUtils.isEmpty(set)) {
+                    throw new MirelApplicationException();
+                    // TODO msg incorrect number of parameters.
+                }
+                return set;
+            }
+
             /* utility */
 
             /**
              * newParameterDefine
              */
-            public static Map<Long, Set<String>> newParameterDefine(long numberOfParameters, String... parameters) {
+            private static Map<Long, Set<String>> newParameterDefine(long numberOfParameters, String... parameters) {
                 if (numberOfParameters != parameters.length) {
                     throw new IllegalArgumentException("expect parameter count is " + numberOfParameters + ", but " + parameters.length);
                 }
@@ -178,15 +193,15 @@ public class SelenideSuite {
         List<String> messages = Lists.newArrayList();
 
         if (null == action.getActionType()) {
-            messages.add("actionType is not declared.");
+            messages.add("actionType is undefined.");
         }
 
         // valid arguments.
 
         // no args.
-        if (action.getActionType().argNum.equals(0) && false == CollectionUtils.isEmpty(action.getActionParameter())) {
-            messages.add("actionType is " + action.getActionType() + " but argument is  declared.");
-        }
+        // if (action.getActionType() && false == CollectionUtils.isEmpty(action.getActionParameter())) {
+        //     messages.add("actionType is " + action.getActionType() + " but argument is  declared.");
+        // }
         
         return messages;
     }
