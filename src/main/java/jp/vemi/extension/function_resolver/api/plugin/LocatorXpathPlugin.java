@@ -1,0 +1,82 @@
+/*
+ * Copyright(c) 2015-2021 vemi.
+ */
+package jp.vemi.extension.function_resolver.api.plugin;
+
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
+
+import org.apache.commons.lang3.StringUtils;
+
+import jp.vemi.extension.function_resolver.api.AbstractInDto;
+import jp.vemi.extension.function_resolver.api.ApiPluginAbstract;
+import jp.vemi.extension.function_resolver.api.ApiResolverCondition;
+
+/**
+ * .<br/>
+ * 
+ * @author vemi/vemic.
+ * @deprecated テスト用です。
+ */
+public class LocatorXpathPlugin extends ApiPluginAbstract {
+
+    protected static class Constants {
+        public final static String API_NAME = "xpath";
+        public final static Integer PARAM_SIZE = 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean is(ApiResolverCondition condition) {
+        return isHit(condition, Constants.API_NAME);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String resolve(ApiResolverCondition condition) {
+        return "Dummy:" + condition.getName();
+    }
+
+    /**
+     * 引数Dto.<br/>
+     * 
+     * @author vemi/vemic.
+     *
+     */
+    protected static class InDto extends AbstractInDto {
+
+        /**
+         * default constructor.<br/>
+         * 
+         * @param ctx
+         */
+        public InDto(ApiResolverCondition ctx) {
+            Map<Integer, Object> args = convertAndValidArgs(ctx);
+        }
+
+        /** arg1 */
+        public String arg1;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected String getApiName() {
+            return Constants.API_NAME;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected int getArgsSize() {
+            return Constants.PARAM_SIZE;
+        }
+    }
+}
