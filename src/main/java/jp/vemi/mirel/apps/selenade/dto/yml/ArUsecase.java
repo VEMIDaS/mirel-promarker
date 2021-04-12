@@ -26,7 +26,7 @@ public class ArUsecase {
     @Setter
     public static class Operation {
         String id;
-        String pageObject;
-        String action;
+        String pageId;
+        String actionId;
     }
 }

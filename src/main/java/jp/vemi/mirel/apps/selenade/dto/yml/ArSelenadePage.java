@@ -20,7 +20,7 @@ public class ArSelenadePage {
 
     @Getter
     @Setter
-    static class Action {
+    public static class Action {
         String id;
         String name;
         String type;

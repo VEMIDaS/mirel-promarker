@@ -11,7 +11,13 @@ import java.util.Map;
 
 import javax.annotation.Generated;
 
+import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SelenideDriver;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.Selectors.ByText;
+
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By.ByXPath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -20,10 +26,14 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.ConstructorException;
 
+import jp.vemi.extension.function_resolver.api.ApiResolver;
+import jp.vemi.extension.function_resolver.api.ApiResolverCondition;
+import jp.vemi.extension.function_resolver.dto.Api;
 import jp.vemi.framework.exeption.MirelApplicationException;
 import jp.vemi.framework.exeption.MirelSystemException;
 import jp.vemi.framework.util.FileUtil;
 import jp.vemi.framework.util.StorageUtil;
+import jp.vemi.mirel.apps.selenade.agent.SelenideSuite;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestParameter;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestResult;
 import jp.vemi.mirel.apps.selenade.dto.ArTestRun;
@@ -33,6 +43,8 @@ import jp.vemi.mirel.apps.selenade.dto.yml.ArSelenadePage;
 import jp.vemi.mirel.foundation.abst.dao.repository.FileManagementRepository;
 import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
 import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
+
+import static com.codeborne.selenide.Selenide.*;
 
 /**
  * {@link RunTestService テスト実行} の具象です。
@@ -93,6 +105,9 @@ public class RunTestServiceImp implements RunTestService {
             }
         }
 
+        SelenideConfig config = new SelenideConfig();
+        SelenideDriver driver = new SelenideDriver(config);
+
         for (Map.Entry<String,ArScenario> entry : testRun.getScenarios().entrySet()) {
             ArScenario scenario = entry.getValue();
             for (Map.Entry<String, ArUsecase> en2ry : scenario.getUsecases().entrySet()) {
@@ -100,12 +115,33 @@ public class RunTestServiceImp implements RunTestService {
                 ArUsecase mergedUsecase = mergeUsecase(en2ry.getValue(), defaultUsecase);
 
                 List<ArUsecase.Operation> operations = mergedUsecase.getOperations();
+                for (ArUsecase.Operation operation : operations) {
+                    operation.getPageId();
+                    ArSelenadePage page = testRun.getPages().get(operation.getPageId());
+
+                    for (ArSelenadePage.Action action : page.getActions()) {
+                        String locator = action.getLocator();
+                        ApiResolverCondition condition = ApiResolverCondition.of(locator);
+                        Api api = (Api)ApiResolver.getInstance().resolve(condition);
+                        SelenideElement sement;
+                        switch(api.getApiName()) {
+                            case "open":
+                                driver.open("param");
+                                break;
+                            case "xpath":
+                                sement = driver.$x((String)api.getParameter().get("value"));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
         }
     }
 
     protected ArUsecase mergeUsecase(ArUsecase usecase, ArUsecase defaultUsecase) {
-        // TODO 実装
+        // TODO マージ実装
         return usecase;
     }
 

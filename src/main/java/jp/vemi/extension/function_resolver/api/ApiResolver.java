@@ -28,6 +28,7 @@ public class ApiResolver {
          * pluginsに手動で追加してください。
          */
         plugins.add(new jp.vemi.extension.function_resolver.api.plugin.DummyApiPlugin());
+        plugins.add(new jp.vemi.extension.function_resolver.api.plugin.LocatorXpathPlugin());
     }
 
     /**
