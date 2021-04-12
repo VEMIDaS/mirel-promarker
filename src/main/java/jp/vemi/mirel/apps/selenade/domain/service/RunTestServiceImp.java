@@ -123,7 +123,7 @@ public class RunTestServiceImp implements RunTestService {
                         String locator = action.getLocator();
                         ApiResolverCondition condition = ApiResolverCondition.of(locator);
                         Api api = (Api)ApiResolver.getInstance().resolve(condition);
-                        SelenideElement sement;
+                        SelenideElement sement = null;
                         switch(api.getApiName()) {
                             case "open":
                                 driver.open("param");
@@ -134,12 +134,28 @@ public class RunTestServiceImp implements RunTestService {
                             default:
                                 break;
                         }
+
+                        if (isAction("type")) { // TODO fix type condition
+                            if (null == sement) {
+                                // error
+                            } else {
+                                // input or click.
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
+    /**
+     * 
+     * @param type
+     * @return
+     */
+    private Boolean isAction(String type) {
+        return true; // TODO
+    }
     protected ArUsecase mergeUsecase(ArUsecase usecase, ArUsecase defaultUsecase) {
         // TODO マージ実装
         return usecase;
