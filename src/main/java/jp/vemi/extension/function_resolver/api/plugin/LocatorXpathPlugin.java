@@ -3,28 +3,24 @@
  */
 package jp.vemi.extension.function_resolver.api.plugin;
 
-import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
-
-import org.apache.commons.lang3.StringUtils;
 
 import jp.vemi.extension.function_resolver.api.AbstractInDto;
 import jp.vemi.extension.function_resolver.api.ApiPluginAbstract;
 import jp.vemi.extension.function_resolver.api.ApiResolverCondition;
+import jp.vemi.extension.function_resolver.dto.Api;
 
 /**
  * .<br/>
  * 
  * @author vemi/vemic.
- * @deprecated テスト用です。
  */
 public class LocatorXpathPlugin extends ApiPluginAbstract {
 
     protected static class Constants {
-        public final static String API_NAME = "xpath";
-        public final static Integer PARAM_SIZE = 1;
+        static final String API_NAME = "xpath";
+        static final Integer PARAM_SIZE = 1;
+        private Constants() { /* nop */ }
     }
 
     /**
@@ -39,8 +35,10 @@ public class LocatorXpathPlugin extends ApiPluginAbstract {
      * {@inheritDoc}
      */
     @Override
-    public String resolve(ApiResolverCondition condition) {
-        return "Dummy:" + condition.getName();
+    public Api resolve(ApiResolverCondition condition) {
+        Api api = new Api();
+        api.setApiName(condition.getName());
+        return api;
     }
 
     /**

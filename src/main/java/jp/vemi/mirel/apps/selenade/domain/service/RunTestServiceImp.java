@@ -8,12 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import javax.annotation.Generated;
 
-import com.google.common.collect.Maps;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -26,14 +24,13 @@ import jp.vemi.framework.exeption.MirelApplicationException;
 import jp.vemi.framework.exeption.MirelSystemException;
 import jp.vemi.framework.util.FileUtil;
 import jp.vemi.framework.util.StorageUtil;
-import jp.vemi.mirel.apps.selenade.agent.SelenideAgent;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestParameter;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestResult;
-import jp.vemi.mirel.apps.selenade.dto.yml.ArActivity;
+import jp.vemi.mirel.apps.selenade.dto.ArTestRun;
+import jp.vemi.mirel.apps.selenade.dto.yml.ArUsecase;
+import jp.vemi.mirel.apps.selenade.dto.yml.ArScenario;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArSelenadePage;
-import jp.vemi.mirel.foundation.abst.dao.entity.FileManagement;
 import jp.vemi.mirel.foundation.abst.dao.repository.FileManagementRepository;
-import jp.vemi.mirel.foundation.feature.files.service.FileDownloadService;
 import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
 import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
@@ -42,9 +39,9 @@ import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
  */
 @Service
 @Transactional
-@Generated(value = {"jp.vemi.ste.domain.engine.TemplateEngineProcessor"}, comments = "Generated from /mirel/service:191207A")
+@Generated(value = {"jp.vemi.ste.domain.engine.TemplateEngineProcessor"},
+    comments = "Generated from /mirel/service:191207A")
 public class RunTestServiceImp implements RunTestService {
-
 
     /** {@link FileManagementRepository} */
     @Autowired
@@ -57,7 +54,6 @@ public class RunTestServiceImp implements RunTestService {
     public ApiResponse<RunTestResult> invoke(ApiRequest<RunTestParameter> parameter) {
 
         ApiResponse<RunTestResult> resp = ApiResponse.<RunTestResult>builder().build();
-
         resp.setModel(RunTestResult.builder().build());
         exec(parameter, resp);
         return resp;
@@ -67,6 +63,7 @@ public class RunTestServiceImp implements RunTestService {
     protected void exec(ApiRequest<RunTestParameter> parameter, ApiResponse<RunTestResult> resp) {
 
         String appKey = (String)parameter.getModel().params.get(0).get("key");
+        ArTestRun testRun = new ArTestRun();
         List<File> files = FileUtil.getFiles(StorageUtil.getFile("apps/apprunner/defs/" + appKey));
         for (File file : files) {
             if (false == file.isDirectory()) {
@@ -74,19 +71,44 @@ public class RunTestServiceImp implements RunTestService {
             }
 
             String fileName = file.getName();
-            if (fileName.startsWith("activity") && fileName.endsWith(".yml"))  {
-                // activity.
-                ArActivity activity = getYaml(file, ArActivity.class);
+
+            // Usecase.
+            if (fileName.startsWith("usecase") && isYaml(fileName))  {
+                ArUsecase usecase = getYaml(file, ArUsecase.class);
+                testRun.addUsecase(usecase);
                 continue;
             }
 
-            if (file.getName().endsWith("page") && fileName.endsWith(".yml")) {
-                // page.
+            // Page.
+            if (fileName.endsWith("page") && isYaml(fileName)) {
                 ArSelenadePage page = getYaml(file, ArSelenadePage.class);
+                testRun.addPage(page);
                 continue;
+            }
+
+            // Scenario.
+            if (fileName.startsWith("scenario") && isYaml(fileName)) {
+                ArScenario scenario = getYaml(file, ArScenario.class);
+                testRun.addScenario(scenario);
+            }
+        }
+
+        for (Map.Entry<String,ArScenario> entry : testRun.getScenarios().entrySet()) {
+            ArScenario scenario = entry.getValue();
+            for (Map.Entry<String, ArUsecase> en2ry : scenario.getUsecases().entrySet()) {
+                ArUsecase defaultUsecase = testRun.getUsecases().get(en2ry.getKey());
+                ArUsecase mergedUsecase = mergeUsecase(en2ry.getValue(), defaultUsecase);
+
+                List<ArUsecase.Operation> operations = mergedUsecase.getOperations();
             }
         }
     }
+
+    protected ArUsecase mergeUsecase(ArUsecase usecase, ArUsecase defaultUsecase) {
+        // TODO 実装
+        return usecase;
+    }
+
 
     /**
      * Get object from yaml file.<br/>
@@ -116,4 +138,19 @@ public class RunTestServiceImp implements RunTestService {
         return true;
     }
 
+    private static Boolean isYaml(String fileName) {
+        if (StringUtils.isEmpty(fileName)) {
+            return false;
+        }
+
+        if (fileName.endsWith(".yml")) {
+            return true;
+        }
+
+        if (fileName.endsWith(".yaml")) {
+            return true;
+        }
+
+        return false;
+    }
 }

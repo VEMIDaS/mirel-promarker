@@ -3,14 +3,22 @@
  */
 package jp.vemi.mirel.apps.selenade.dto.yml;
 
-import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * Scenario.<br/>
+ */
+@Getter
+@Setter
+@NoArgsConstructor
 public class ArScenario {
 
-
-
-
-    List<ArActivity> activity;
-    List<ArSelenadePage> page;
-    
+    String id;
+    Map<String, ArUsecase> usecases = Maps.newLinkedHashMap();
 }

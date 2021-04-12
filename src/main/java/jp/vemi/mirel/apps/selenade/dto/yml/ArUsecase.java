@@ -8,17 +8,23 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Usecase.
+ */
 @Getter
 @Setter
-public class ArActivity {
+public class ArUsecase {
     String id;
     String name;
     String notes;
     List<Operation> operations;
 
+    /**
+     * Operation.<br/>
+     */
     @Getter
     @Setter
-    static class Operation {
+    public static class Operation {
         String id;
         String pageObject;
         String action;
