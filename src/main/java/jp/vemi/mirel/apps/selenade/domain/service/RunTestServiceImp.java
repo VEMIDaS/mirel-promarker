@@ -14,10 +14,8 @@ import javax.annotation.Generated;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.Selectors.ByText;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By.ByXPath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,6 @@ import jp.vemi.framework.exeption.MirelApplicationException;
 import jp.vemi.framework.exeption.MirelSystemException;
 import jp.vemi.framework.util.FileUtil;
 import jp.vemi.framework.util.StorageUtil;
-import jp.vemi.mirel.apps.selenade.agent.SelenideSuite;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestParameter;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestResult;
 import jp.vemi.mirel.apps.selenade.dto.ArTestRun;
@@ -140,6 +137,16 @@ public class RunTestServiceImp implements RunTestService {
                                 // error
                             } else {
                                 // input or click.
+                                switch("type") {
+                                    case "input":
+                                        
+                                        break;
+                                    case "click":
+                                        sement.click();
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
                     }
