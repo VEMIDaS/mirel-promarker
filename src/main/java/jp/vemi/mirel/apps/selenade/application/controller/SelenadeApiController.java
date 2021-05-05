@@ -19,7 +19,7 @@ import jp.vemi.mirel.apps.selenade.domain.api.SelenadeApi;
 import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 
 @RestController
-@RequestMapping("apps/selenade/api")
+@RequestMapping("apps/arr/api")
 public class SelenadeApiController {
 
     @Autowired(required=false)

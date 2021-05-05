@@ -48,6 +48,10 @@ public class FileUtil {
    * @return
    */
   public static List<File> getFiles(File in) {
+    return getFiles(in, null);
+  }
+
+    public static List<File> getFiles(File in, String... ignoreKeywords) {
 
     if (null == in)
       return Lists.newArrayList();
@@ -61,7 +65,15 @@ public class FileUtil {
       return Lists.newArrayList();
 
     List<File> result = Lists.newArrayList();
-    for (File f : files) {
+    LABEL_FILE_LOOP: for (File f : files) {
+
+      if (null != ignoreKeywords && ignoreKeywords.length > 0) {
+        for (String ignoreKeyword : ignoreKeywords) {
+          if (f.getName().contains(ignoreKeyword)) {
+            continue LABEL_FILE_LOOP;
+          }
+        }
+      }
 
       if (f.isDirectory()) {
         result.addAll(getFiles(f));

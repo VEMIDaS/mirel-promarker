@@ -6,16 +6,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import jp.vemi.extension.function_resolver.api.ApiResolver;
 import jp.vemi.extension.function_resolver.api.ApiResolverCondition;
 import jp.vemi.extension.function_resolver.exception.FunctionException;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Function {
         public String functionStatement;
         public String functionName;
-        public Map<Integer, Object> args = new HashMap<>();
+        public Map<String, Object> args = new HashMap<>();
         public Object result;
     
         /** Double Quote. */
@@ -26,8 +31,8 @@ public class Function {
          * 
          * @param value
          */
-        public void addArg(Object value) {
-            addArg(args.size(), value);
+        public synchronized void addArg(Object value) {
+            addArg(Integer.toString(args.size()), value);
         }
     
         /**
@@ -36,7 +41,7 @@ public class Function {
          * @param key
          * @param value
          */
-        public void addArg(Integer key, Object value) {
+        public void addArg(String key, Object value) {
     
             rejectIfInvoked();
     

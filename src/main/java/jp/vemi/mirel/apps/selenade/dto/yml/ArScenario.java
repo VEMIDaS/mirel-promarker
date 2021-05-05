@@ -3,9 +3,8 @@
  */
 package jp.vemi.mirel.apps.selenade.dto.yml;
 
+import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +18,43 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ArScenario {
 
-    String id;
-    Map<String, ArUsecase> usecases = Maps.newLinkedHashMap();
+    Scenario scenario;
+    Data data;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Scenario {
+        String id;
+        String name;
+        String note;
+        List<Usecase> usecase;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Data {
+        String parameterId;
+        List<DataVariable> variable;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Usecase {
+        String id;
+        Integer sort;
+        String usecaseId;
+    }
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class DataVariable {
+        String id;
+        String name;
+        String type;
+        String defaultValue;
+        List<Map<String, Object>> valuePattern;
+    }
 }

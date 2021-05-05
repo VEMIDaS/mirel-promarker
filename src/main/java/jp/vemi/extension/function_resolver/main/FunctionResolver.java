@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.google.common.collect.Maps;
@@ -30,12 +31,41 @@ public class FunctionResolver {
     }
 
     /**
+     * 解決.<br/>
+     * @param statement ステートメント
+     * @return {@link Functions} Function.
+     */
+    public static Function resolveSingleFunction(String statement) {
+        FunctionResolverCondition condition = FunctionResolverCondition.of(statement);
+        Functions functions = FunctionResolverPrototype.invoke(condition);
+        Optional<Function> optional = functions.stream().findFirst();
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+     * 解決.<br/>
+     * @param statement ステートメント
+     * @return {@link Functions} Function.
+     */
+    public static Functions resolve(String statement) {
+        FunctionResolverCondition condition = FunctionResolverCondition.of(statement);
+        return FunctionResolverPrototype.invoke(condition);
+    }
+
+    /**
      * 解決し即パースします。.<br/>
      * 
      * @param target
      *            文字列
      * @return 解決・パースされた文字列
+     * @deprecated このAPIは削除されます。
      */
+    @Deprecated
     public static String resolveAndParseImmediate(String target) {
         FunctionResolverCondition condition = FunctionResolverCondition.of(target);
         return resolveAndParseImmediate(condition);
@@ -47,7 +77,9 @@ public class FunctionResolver {
      * @param condition
      *            コンテキスト
      * @return 解決・パースされた文字列
+     * @deprecated このAPIは削除されます。
      */
+    @Deprecated
     public static String resolveAndParseImmediate(FunctionResolverCondition condition) {
         String resolved = resolve(condition);
         return TemplateParser.parse(resolved, condition.binds);
@@ -59,7 +91,9 @@ public class FunctionResolver {
      * @param condition
      *            コンテキスト
      * @return 解決された文字列
+     * @deprecated このAPIは削除されます。
      */
+    @Deprecated
     public static String resolve(FunctionResolverCondition condition) {
         Functions apis = resolveFunctions(condition);
 
@@ -85,7 +119,9 @@ public class FunctionResolver {
      * @param condition
      *            コンテキスト
      * @return {@link Functions 複数の関数}
+     * @deprecated このAPIは削除されます。
      */
+    @Deprecated
     protected static Functions resolveFunctions(FunctionResolverCondition condition) {
         return FunctionResolverPrototype.invoke(condition);
     }
@@ -96,6 +132,7 @@ public class FunctionResolver {
      * @param apis
      *            {@link Functions}
      * @return 解決されたマップ
+     * 
      */
     protected static Map<String, Object> parse(Functions apis) {
         if (ObjectUtils.isEmpty(apis)) {

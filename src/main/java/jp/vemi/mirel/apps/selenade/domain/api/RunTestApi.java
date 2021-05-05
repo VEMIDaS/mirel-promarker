@@ -25,12 +25,24 @@ public class RunTestApi implements SelenadeApi {
     protected RunTestService service;
 
     public ApiResponse<?> service(Map<String, Object> request) {
+        Map<String, Object> parameterContent = forceCast(request.get("content"));
 
         ApiRequest<RunTestParameter> apireq = ApiRequest.<RunTestParameter>builder().model(
-            RunTestParameter.builder().params(Lists.newArrayList(request)).build()).build();
+            RunTestParameter.builder().params(Lists.newArrayList(parameterContent)).build()).build();
 
         ApiResponse<?> response = service.invoke(apireq);
         return response;
+    }
+
+    /**
+     * forceCast.<br/>
+     * @param <T> Dest class.
+     * @param object Src object.
+     * @return Casted instance.
+     */
+    @SuppressWarnings("unchecked")
+    private static <T> T forceCast(Object object) {
+        return (T) object;
     }
 
 }

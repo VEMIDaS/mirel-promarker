@@ -11,12 +11,19 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ArSelenadePage {
-    String id;
-    String name;
-    String appId;
-    String contextPath;
-    String notes;
-    List<Action> actions;
+
+    Page page;
+
+    @Getter
+    @Setter
+    public static class Page {
+        String id;
+        String name;
+        String appId;
+        String contextPath;
+        String note;
+        List<Action> action;
+    }
 
     @Getter
     @Setter
@@ -24,9 +31,10 @@ public class ArSelenadePage {
         String id;
         String name;
         String type;
+        String value;
         String locator;
         Boolean ignoreIfNotFound;
-        List<String> includeTags;
+        List<String> includeTag;
     }
 
 }
