@@ -6,6 +6,7 @@ package jp.vemi.mirel.apps.selenade.domain.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,10 @@ import jp.vemi.framework.util.StorageUtil;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestParameter;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestResult;
 import jp.vemi.mirel.apps.selenade.dto.ArTestRun;
+import jp.vemi.mirel.apps.selenade.dto.evidence.Evidence;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArUsecase;
+import jp.vemi.mirel.apps.selenade.evidencve.EvidenceManager;
+import jp.vemi.mirel.apps.selenade.evidencve.EvidenceManager.ImageFile;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArConfig;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArData;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArScenario;
@@ -175,13 +179,15 @@ public class RunTestServiceImp implements RunTestService {
                 }
             }
         }
-
+        long runId = 1L;
         // Execute.
         for (Map.Entry<String,ArScenario.Scenario> entry : testRun.getScenarios().entrySet()) {
             ArScenario.Scenario scenario = entry.getValue();
+            EvidenceManager eManager = EvidenceManager.create("Run#" + runId + " " + scenario.getId() + ":" + scenario.getName());
             Map<String, SelenideDriver> selDriverTable = Maps.newLinkedHashMap();
             for (ArScenario.Usecase usecase : scenario.getUsecase()) {
-                ArUsecase.Usecase defaultUsecase = testRun.getUsecases().get(usecase.getUsecaseId());
+                Evidence evidence = Evidence.$evidenceHeader(usecase.getId());
+                ArUsecase.Usecase defaultUsecase = testRun.getUsecases().get(usecase.getId());
                 ArUsecase.Usecase mergedUsecase = mergeUsecase(usecase, defaultUsecase);
 
                 List<ArUsecase.Step> steps = mergedUsecase.getStep();
@@ -237,16 +243,26 @@ public class RunTestServiceImp implements RunTestService {
                                             resolve(value);
                                             if (sement.exists()) {
                                                 sement.setValue(value);
-                                            } else if (action.getIgnoreIfNotFound()) {
-                                                // TODO ok.
-                                                log("ignore target.");
                                             } else {
-                                                // TODO error.
-                                                log("element not found.");
+                                                Boolean isIgnore = action.getIgnoreIfNotFound();
+                                                if (null == isIgnore) {
+                                                    isIgnore = false;
+                                                }
+                                                if (isIgnore) {
+                                                    // TODO ok.
+                                                    log("ignore target.");
+                                                } else {
+                                                    // TODO error.
+                                                    log("element not found.");
+                                                }
                                             }
                                             break;
                                         case "click":
+                                        if (sement.exists()) {
                                             sement.click();
+                                        } else {
+                                            log("click function is not available.");
+                                        }
                                             break;
                                         case "select":
                                             break;
@@ -255,6 +271,12 @@ public class RunTestServiceImp implements RunTestService {
                                     }
                                 }
                             }
+                            if (Boolean.TRUE == action.getSaveScreen()) {
+                                File file = sement.screenshot();
+                                eManager.append(evidence, ImageFile.as(file));
+                            }
+
+
                         }
                     }
                 }

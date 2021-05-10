@@ -86,6 +86,7 @@ public class ArUsecase {
         String api;
         String value;
         String actionTemplate;
+        Boolean isSaveScreen;
         Map<String, Object> parameter;
     }
 }

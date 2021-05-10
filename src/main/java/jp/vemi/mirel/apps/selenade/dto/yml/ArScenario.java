@@ -35,7 +35,7 @@ public class ArScenario {
     @Setter
     @NoArgsConstructor
     public static class Data {
-        String parameterId;
+        String id;
         List<DataVariable> variable;
     }
 
@@ -44,8 +44,8 @@ public class ArScenario {
     @NoArgsConstructor
     public static class Usecase {
         String id;
+        String name;
         Integer sort;
-        String usecaseId;
     }
     @Getter
     @Setter
