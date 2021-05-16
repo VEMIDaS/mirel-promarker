@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -21,6 +22,7 @@ import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.OutputType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,7 @@ import jp.vemi.extension.function_resolver.main.FunctionResolver;
 import jp.vemi.extension.function_resolver.main.FunctionResolverCondition;
 import jp.vemi.framework.exeption.MirelApplicationException;
 import jp.vemi.framework.exeption.MirelSystemException;
+import jp.vemi.framework.util.DateUtil;
 import jp.vemi.framework.util.FileUtil;
 import jp.vemi.framework.util.StorageUtil;
 import jp.vemi.mirel.apps.selenade.domain.dto.RunTestParameter;
@@ -45,6 +48,8 @@ import jp.vemi.mirel.apps.selenade.domain.dto.RunTestResult;
 import jp.vemi.mirel.apps.selenade.dto.ArTestRun;
 import jp.vemi.mirel.apps.selenade.dto.evidence.Evidence;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArUsecase;
+import jp.vemi.mirel.apps.selenade.dto.yml.ArSelenadePage.Page;
+import jp.vemi.mirel.apps.selenade.dto.yml.ArUsecase.Action;
 import jp.vemi.mirel.apps.selenade.evidencve.EvidenceManager;
 import jp.vemi.mirel.apps.selenade.evidencve.EvidenceManager.ImageFile;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArConfig;
@@ -179,15 +184,16 @@ public class RunTestServiceImp implements RunTestService {
                 }
             }
         }
-        long runId = 1L;
+
+        String run = createId();
         // Execute.
         for (Map.Entry<String,ArScenario.Scenario> entry : testRun.getScenarios().entrySet()) {
             ArScenario.Scenario scenario = entry.getValue();
-            EvidenceManager eManager = EvidenceManager.create("Run#" + runId + " " + scenario.getId() + ":" + scenario.getName());
+            EvidenceManager eManager = EvidenceManager.create("Run#" + run + " " + scenario.getId() + ":" + scenario.getName());
             Map<String, SelenideDriver> selDriverTable = Maps.newLinkedHashMap();
             for (ArScenario.Usecase usecase : scenario.getUsecase()) {
                 Evidence evidence = Evidence.$evidenceHeader(usecase.getId());
-                ArUsecase.Usecase defaultUsecase = testRun.getUsecases().get(usecase.getId());
+                ArUsecase.Usecase defaultUsecase = testRun.getUsecases().get(usecase.getUsecaseId());
                 ArUsecase.Usecase mergedUsecase = mergeUsecase(usecase, defaultUsecase);
 
                 List<ArUsecase.Step> steps = mergedUsecase.getStep();
@@ -216,7 +222,8 @@ public class RunTestServiceImp implements RunTestService {
                         }
 
                         log("  Page: " + page.getName());
-                        for (ArSelenadePage.Action action : page.getAction()) {
+                        for (ArUsecase.Action ucaction : selenidePlugin.getAction()) {
+                            ArUsecase.Action action = completeAction(ucaction, page);
                             log("    Action: " + action.getName());
                             String locator = action.getLocator();
                             Function function = FunctionResolver.resolveSingleFunction(locator);
@@ -271,13 +278,14 @@ public class RunTestServiceImp implements RunTestService {
                                     }
                                 }
                             }
-                            if (Boolean.TRUE == action.getSaveScreen()) {
+                            if (Boolean.TRUE == action.getSaveScreen() && sement.exists()) {
                                 File file = sement.screenshot();
-                                eManager.append(evidence, ImageFile.as(file));
+                                eManager.append(evidence, ImageFile.as(file, StorageUtil.getBaseDir() + "/apps/apprunner/testrun/" + run + "/evidence/component/"));
                             }
 
-
                         }
+                        File stepScreenshot = selDriver.screenshot(OutputType.FILE);
+                        eManager.append(evidence, ImageFile.as(stepScreenshot, StorageUtil.getBaseDir() + "/apps/apprunner/testrun/" + run + "/evidence/"));
                     }
                 }
             }
@@ -288,7 +296,39 @@ public class RunTestServiceImp implements RunTestService {
                     driver.close();
                 }
             });
+
+            eManager.buildAndPrint();
         }
+    }
+
+    private Action completeAction(Action action, Page page) {
+
+        if (StringUtils.isEmpty(action.getActionTemplate())) {
+            return action;
+        }
+
+        for (ArSelenadePage.Action pageAction : page.getAction()){
+            if (false == action.getActionTemplate().equals(pageAction.getId())) {
+                continue;
+            }
+
+            if (StringUtils.isEmpty(action.getName())) {
+                action.setName(pageAction.getName());
+            }
+
+            if (StringUtils.isEmpty(action.getType())) {
+                action.setType(pageAction.getType());
+            }
+
+            if (StringUtils.isEmpty(action.getLocator())) {
+                action.setLocator(pageAction.getLocator());
+            }
+
+            if (null == action.getIgnoreIfNotFound()) {
+                action.setIgnoreIfNotFound(pageAction.getIgnoreIfNotFound());
+            }
+        }
+        return action;
     }
 
     private void validConfig(ArConfig config, ApiResponse<RunTestResult> resp, String fileName) {
@@ -479,6 +519,7 @@ public class RunTestServiceImp implements RunTestService {
         }
         return object;
     }
+
     protected boolean isDebugMode() {
         return true;
     }
@@ -509,4 +550,9 @@ public class RunTestServiceImp implements RunTestService {
         }
         Arrays.asList(messages).stream().forEach(System.out::println);
     }
+
+    protected static String createId() {
+        return DateUtil.toString(new Date(), "yyMMddHHmmssSSS");
+    }
+
 }

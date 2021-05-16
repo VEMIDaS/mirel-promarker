@@ -46,6 +46,7 @@ public class ArScenario {
         String id;
         String name;
         Integer sort;
+        String usecaseId;
     }
     @Getter
     @Setter

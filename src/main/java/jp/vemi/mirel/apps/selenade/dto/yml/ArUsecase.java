@@ -81,10 +81,8 @@ public class ArUsecase {
 
     @Getter
     @Setter
-    public static class Action {
-        String id;
+    public static class Action extends ArSelenadePage.Action {
         String api;
-        String value;
         String actionTemplate;
         Boolean isSaveScreen;
         Map<String, Object> parameter;

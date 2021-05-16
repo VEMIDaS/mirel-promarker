@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import jp.vemi.framework.exeption.MessagingException;
+import jp.vemi.framework.util.StorageUtil;
 import jp.vemi.mirel.apps.selenade.dto.evidence.Evidence;
 import jp.vemi.mirel.apps.selenade.dto.evidence.QueryLog;
 
@@ -66,6 +69,12 @@ public class EvidenceManager {
 
         // print individual header.
 
+        // Image flie?
+        if (object instanceof ImageFile) {
+            ImageFile image = cast(object);
+            evidence.addData(image);
+            return this;
+        }
         // Throwable?
         if (object instanceof Throwable) {
             x: if (object instanceof MessagingException) {
@@ -298,10 +307,19 @@ public class EvidenceManager {
             super(pathname);
         }
 
-        public static ImageFile as(File file) {
-            ImageFile imageFile = null;
-            // TODO impl
-            return imageFile;
+        public static ImageFile as(File sourceFile, String targetDir) {
+            Path source = Paths.get(sourceFile.getPath());
+            Path targetDirPath = Paths.get(targetDir);
+            if (false == targetDirPath.toFile().exists()) {
+                targetDirPath.toFile().mkdirs();
+            }
+            Path targetFilePath = Paths.get(targetDir + "/" + sourceFile.getName());
+            try {
+                Files.copy(source, targetFilePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new ImageFile(targetDir);
         }
     }
 }

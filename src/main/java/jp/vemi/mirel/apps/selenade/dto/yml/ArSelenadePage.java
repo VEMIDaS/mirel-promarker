@@ -34,7 +34,7 @@ public class ArSelenadePage {
         String value;
         String locator;
         Boolean ignoreIfNotFound;
-        Boolean saveScreen;
+        Boolean saveScreen = true;
         List<String> includeTag;
     }
 
