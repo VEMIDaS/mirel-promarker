@@ -5,14 +5,14 @@ package jp.vemi.mirel.foundation.abst.dao.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +28,7 @@ public class FileManagement {
 
     /** ファイルID */
     @Id
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @UuidGenerator
     @Column()
     public String fileId;
 

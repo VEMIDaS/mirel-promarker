@@ -5,19 +5,18 @@ package jp.vemi.mirel.foundation.feature.files.service;
 
 import java.io.File;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.multipart.MultipartFile;
-
-import groovy.lang.Tuple2;
 
 /**
  * ファイル登録サービス .<br/>
  */
 public interface FileRegisterService {
 
-  public Tuple2<String, String> register(File file, boolean isZip);
+  public Pair<String, String> register(File file, boolean isZip);
 
-  public Tuple2<String, String> register(MultipartFile multipartFile);
+  public Pair<String, String> register(MultipartFile multipartFile);
 
-  public Tuple2<String, String> register(File srcFile, boolean isZip, String fileName);
+  public Pair<String, String> register(File srcFile, boolean isZip, String fileName);
 
 }

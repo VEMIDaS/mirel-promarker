@@ -19,9 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.ConstructorException;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
 
 import jp.vemi.framework.exeption.MirelApplicationException;
 import jp.vemi.framework.exeption.MirelSystemException;
@@ -142,7 +143,8 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
     protected StencilSettingsYml readYaml (File file) {
         StencilSettingsYml settings = null;
         try(InputStream stream = new FileSystemResource(file).getInputStream()) {
-            settings = new Yaml(new Constructor(StencilSettingsYml.class))
+            LoaderOptions options = new LoaderOptions();
+            settings = new Yaml(new SafeConstructor(options))
                 .loadAs(stream, StencilSettingsYml.class);
         } catch (final ConstructorException e) {
             e.printStackTrace();

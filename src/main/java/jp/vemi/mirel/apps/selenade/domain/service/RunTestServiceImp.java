@@ -6,13 +6,10 @@ package jp.vemi.mirel.apps.selenade.domain.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-
 import javax.annotation.Generated;
 
 import com.codeborne.selenide.SelenideConfig;
@@ -27,17 +24,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.ConstructorException;
-
-import jp.vemi.extension.function_resolver.api.ApiResolver;
-import jp.vemi.extension.function_resolver.api.ApiResolverCondition;
-import jp.vemi.extension.function_resolver.dto.Api;
 import jp.vemi.extension.function_resolver.function.Function;
-import jp.vemi.extension.function_resolver.function.Functions;
 import jp.vemi.extension.function_resolver.main.FunctionResolver;
-import jp.vemi.extension.function_resolver.main.FunctionResolverCondition;
 import jp.vemi.framework.exeption.MirelApplicationException;
 import jp.vemi.framework.exeption.MirelSystemException;
 import jp.vemi.framework.util.DateUtil;
@@ -59,8 +50,6 @@ import jp.vemi.mirel.apps.selenade.dto.yml.ArSelenadePage;
 import jp.vemi.mirel.foundation.abst.dao.repository.FileManagementRepository;
 import jp.vemi.mirel.foundation.web.api.dto.ApiRequest;
 import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
-
-import static com.codeborne.selenide.Selenide.*;
 
 /**
  * {@link RunTestService テスト実行} の具象です。
@@ -278,11 +267,10 @@ public class RunTestServiceImp implements RunTestService {
                                     }
                                 }
                             }
-                            if (Boolean.TRUE == action.getSaveScreen() && sement.exists()) {
+                            if (Boolean.TRUE == action.getSaveScreen() && sement != null && sement.exists()) {
                                 File file = sement.screenshot();
                                 eManager.append(evidence, ImageFile.as(file, StorageUtil.getBaseDir() + "/apps/apprunner/testrun/" + run + "/evidence/component/"));
                             }
-
                         }
                         File stepScreenshot = selDriver.screenshot(OutputType.FILE);
                         eManager.append(evidence, ImageFile.as(stepScreenshot, StorageUtil.getBaseDir() + "/apps/apprunner/testrun/" + run + "/evidence/"));
@@ -505,7 +493,9 @@ public class RunTestServiceImp implements RunTestService {
     protected <T> T getYaml(File file, Class<T> clazz) {
         T object;
         try(InputStream stream = new FileSystemResource(file).getInputStream()) {
-            object = new Yaml(new Constructor(clazz)).loadAs(stream, clazz);
+            LoaderOptions options = new LoaderOptions();
+            Yaml yaml = new Yaml(options);
+            object = yaml.loadAs(stream, clazz);
         } catch (final ConstructorException e) {
             e.printStackTrace();
             String msg = "yamlの読込でエラーが発生しました。";

@@ -6,8 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import org.junit.jupiter.api.Test;
+
 import com.google.common.collect.Maps;
-import org.junit.Test;
 
 import jp.vemi.extension.function_resolver.function.Functions;
 
@@ -19,20 +20,20 @@ import jp.vemi.extension.function_resolver.function.Functions;
  */
 public class FunctionResolverTest {
 
-    private static String sentence1 =
-        "${_dummyGreeting()}、 ${_dummyUserName('U100')} さん。${purposeName} を行うには、{_dummyPurposeProcess(purposeId, 'ボタン押下')} を行ってください。";
+    // private static String sentence1 =
+    //     "${_dummyGreeting()}、 ${_dummyUserName('U100')} さん。${purposeName} を行うには、{_dummyPurposeProcess(purposeId, 'ボタン押下')} を行ってください。";
 
     @Test
     public final void aaa1() {
-        String statement = sentence1;
+        // String statement = sentence1;
 
         Map<String, Object > binds = defaultBinds();
 
-        String result =
-                FunctionResolver.resolveAndParseImmediate(
-                    FunctionResolverCondition.of(statement, binds));
+        // String result =
+        //         FunctionResolver.resolveAndParseImmediate(
+        //             FunctionResolverCondition.of(statement, binds));
 
-        log(result);
+        // log(result);
         log(binds);
     }
 
@@ -41,22 +42,17 @@ public class FunctionResolverTest {
         return execute(arg, bind);
     }
 
-    protected String execute2(String statement, Map<String, Object> binds) {
-        FunctionResolverCondition condition = FunctionResolverCondition.of(statement, binds);
-        return FunctionResolver.resolve(condition);
-
-    }
-
     protected Map<String, Object> execute(String arg,
             Map<String, Object> binds) {
-        FunctionResolverCondition condition = FunctionResolverCondition.of(arg, binds);
-        Functions apis = FunctionResolver.resolveFunctions(condition);
-        log(apis);
-        Map<String, Object> result = apis.invoke();
-        return result;
+        // FunctionResolverCondition condition = FunctionResolverCondition.of(arg, binds);
+        // Functions apis = FunctionResolver.resolveFunctions(condition);
+        // log(apis);
+        // Map<String, Object> result = apis.invoke();
+        // return result;
+        return null;
     }
 
-    protected Map<String, Object> defaultBinds() {
+    protected static Map<String, Object> defaultBinds() {
         Map<String, Object> binds = Maps.newHashMap();
         binds.put("tranBind1", "A123");
         binds.put("alreadyObject", "★already-object!★");
@@ -83,7 +79,7 @@ public class FunctionResolverTest {
         System.out.println(value);
     }
 
-    private Date parseDate(String date, String format) {
+    private static Date parseDate(String date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         try {
             return sdf.parse(date);

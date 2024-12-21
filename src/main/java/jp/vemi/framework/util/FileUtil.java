@@ -48,7 +48,7 @@ public class FileUtil {
    * @return
    */
   public static List<File> getFiles(File in) {
-    return getFiles(in, null);
+    return getFiles(in);
   }
 
     public static List<File> getFiles(File in, String... ignoreKeywords) {

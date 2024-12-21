@@ -11,13 +11,13 @@ import java.util.NoSuchElementException;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import groovy.lang.Tuple2;
 import jp.vemi.framework.exeption.MessagingException;
 import jp.vemi.framework.util.InstanceUtil;
 import jp.vemi.mirel.apps.mste.domain.dto.GenerateParameter;
@@ -36,7 +36,7 @@ import jp.vemi.ste.domain.engine.StructureReader;
  */
 @Service
 @Transactional
-public class GenerateServiceImp implements GenerateService{
+public class GenerateServiceImp implements GenerateService {
 
     @Autowired
     protected FileRegisterService fileRegisterService;
@@ -52,12 +52,12 @@ public class GenerateServiceImp implements GenerateService{
 
         ApiResponse<GenerateResult> resp = ApiResponse.<GenerateResult>builder().build();
 
-        List<Tuple2<String, String>> retItems = Lists.newArrayList();
+        List<Pair<String, String>> retItems = Lists.newArrayList();
         parameter.getModel().params.stream().forEach(item -> {
 
             Map<String, Object> once = InstanceUtil.forceCast(item.get("content"));
             List<String> errs = validate(once);
-            if(false == CollectionUtils.isEmpty(errs)) {
+            if (false == CollectionUtils.isEmpty(errs)) {
                 // has err
                 resp.errs.addAll(errs);
                 return;
@@ -87,7 +87,7 @@ public class GenerateServiceImp implements GenerateService{
 
                 try {
                     engine.appendContext(file(value, resp));
-                } catch(Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     resp.errs.add(e.getLocalizedMessage());
                     return;
@@ -96,20 +96,20 @@ public class GenerateServiceImp implements GenerateService{
 
             // create.
             String filePath;
-            try{
+            try {
                 filePath = engine.execute();
-            } catch(MessagingException e) {
+            } catch (MessagingException e) {
                 e.printStackTrace();
                 resp.errs.addAll(e.messages);
                 return;
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 resp.errs.add(e.getLocalizedMessage());
                 return;
             }
 
             // register fileitem.
-            Tuple2<String, String> file = fileRegisterService.register(new File(filePath), true);
+            Pair<String, String> file = fileRegisterService.register(new File(filePath), true);
 
             retItems.add(file);
 
@@ -126,31 +126,31 @@ public class GenerateServiceImp implements GenerateService{
         Map<String, Object> once = Maps.newHashMap();
         FileManagement item;
         try {
-          item = fileManagementRepository.findById(fileId).get();
+            item = fileManagementRepository.findById(fileId).get();
         } catch (NoSuchElementException e) {
-          e.printStackTrace();
-          resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
-          return once;
+            e.printStackTrace();
+            resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
+            return once;
         }
-  
+
         // file record is null.
         if (null == item) {
-          resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
-          return once;
+            resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
+            return once;
         }
-
-
 
         StructureReader sreader = new StructureReader();
         Map<String, List<Map<String, Object>>> tac = sreader.read(item.getFilePath());
         for (Map.Entry<String, List<Map<String, Object>>> entry : tac.entrySet()) {
             once.put(entry.getKey(), entry.getValue());
         }
-    
+
         return once;
     }
+
     /**
      * validate. <br/>
+     * 
      * @param param パラメータ
      * @return メッセージ一覧
      */
@@ -158,11 +158,16 @@ public class GenerateServiceImp implements GenerateService{
 
         List<String> valids = Lists.newArrayList();
 
-        if (StringUtils.isEmpty(param.get("stencilCanonicalName")) || "*".equals(param.get("stencilCanonicalName"))) {
+        final Object stencilCanonicalNameObject = param.get("stencilCanonicalName");
+        final String stencilCanonicalName = stencilCanonicalNameObject == null ? StringUtils.EMPTY
+                : stencilCanonicalNameObject.toString();
+        if (StringUtils.isEmpty(stencilCanonicalName) || "*".equals(stencilCanonicalName)) {
             valids.add("ステンシルが指定されていません。");
         }
 
-        if (StringUtils.isEmpty(param.get("serialNo")) || "*".equals(param.get("serialNo"))) {
+        final Object serialNoObject = param.get("serialNo");
+        final String serialNo = serialNoObject == null ? StringUtils.EMPTY : serialNoObject.toString();
+        if (StringUtils.isEmpty(serialNo) || "*".equals(serialNo)) {
             valids.add("シリアルが指定されていません。");
         }
 

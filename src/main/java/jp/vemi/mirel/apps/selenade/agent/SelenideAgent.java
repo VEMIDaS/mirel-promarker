@@ -11,6 +11,7 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 
 import jp.vemi.framework.exeption.MirelApplicationException;
+import jp.vemi.mirel.apps.selenade.agent.SelenideSuite.Action.ActionType;
 
 /**
  * Selenide の Agent です。
@@ -68,6 +69,11 @@ public class SelenideAgent {
             default:
             throw newApplicationException("利用可能な Action でありません。" + actionType.name());
         }
+    }
+
+    private void isValidArgsCount(ActionType actionType, Map<String, Object> parameter) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isValidArgsCount'");
     }
 
     protected void open(Map<String, Object> parameter) {

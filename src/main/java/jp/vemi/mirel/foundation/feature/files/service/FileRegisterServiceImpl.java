@@ -9,12 +9,12 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
-import groovy.lang.Tuple2;
 import jp.vemi.framework.util.DateUtil;
 import jp.vemi.framework.util.FileUtil;
 import jp.vemi.framework.util.StorageUtil;
@@ -33,7 +33,7 @@ public class FileRegisterServiceImpl implements FileRegisterService {
   protected static final String ATCH_FILE_NAME = "__file";
 
   @Override
-  public Tuple2<String, String> register(MultipartFile multipartFile) {
+  public Pair<String, String> register(MultipartFile multipartFile) {
     String temporaryUuid = UUID.randomUUID().toString();
     File temporary = new File(System.getProperty("java.io.tmpdir") + "/ProMarker/" + temporaryUuid);
     FileUtil.transfer(multipartFile, temporary, ATCH_FILE_NAME);
@@ -44,7 +44,7 @@ public class FileRegisterServiceImpl implements FileRegisterService {
    * {@inheritDoc}
    */
   @Override
-  public Tuple2<String, String> register(File srcFile, boolean isZip) {
+  public Pair<String, String> register(File srcFile, boolean isZip) {
     return register(srcFile, isZip, null);
   }
 
@@ -52,7 +52,7 @@ public class FileRegisterServiceImpl implements FileRegisterService {
    * {@inheritDoc}
    */
   @Override
-  public Tuple2<String, String> register(File srcFile, boolean isZip, String fileName) {
+  public Pair<String, String> register(File srcFile, boolean isZip, String fileName) {
 
     String uuid = UUID.randomUUID().toString();
 
@@ -83,8 +83,7 @@ public class FileRegisterServiceImpl implements FileRegisterService {
     fileManagement.filePath = dest + "\\" + ATCH_FILE_NAME;
     fileManagement.expireDate = DateUtils.addDays(new Date(), defaultExpireTerms());
     fileManagementRepository.save(fileManagement);
-    return new Tuple2<>(uuid, fileName);
-
+    return Pair.of(uuid, fileName);
   }
 
   /**

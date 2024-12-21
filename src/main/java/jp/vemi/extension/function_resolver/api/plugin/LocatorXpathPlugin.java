@@ -55,6 +55,7 @@ public class LocatorXpathPlugin extends ApiPluginAbstract {
          * @param ctx
          */
         public InDto(ApiResolverCondition ctx) {
+            @SuppressWarnings("unused")
             Map<Integer, Object> args = convertAndValidArgs(ctx);
         }
 

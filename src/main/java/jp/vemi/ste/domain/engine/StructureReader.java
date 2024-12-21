@@ -88,7 +88,7 @@ public class StructureReader {
                 if(null == cellitem) {
                     return;
                 }
-                detailKeyValue.put(cellitem.getFirst(), getCellValue(cell));
+                detailKeyValue.put(cellitem.getV1(), getCellValue(cell));
             });
             if (ObjectUtils.isEmpty(detailKeyValue.get("nouse"))) {
                 details.add(detailKeyValue);

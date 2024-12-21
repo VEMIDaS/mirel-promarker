@@ -8,8 +8,8 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArUsecase;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArConfig;
 import jp.vemi.mirel.apps.selenade.dto.yml.ArData;

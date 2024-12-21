@@ -8,8 +8,6 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
-import org.apache.commons.lang3.StringUtils;
-
 import jp.vemi.extension.function_resolver.api.AbstractInDto;
 import jp.vemi.extension.function_resolver.api.ApiPluginAbstract;
 import jp.vemi.extension.function_resolver.api.ApiResolverCondition;
@@ -18,9 +16,7 @@ import jp.vemi.extension.function_resolver.api.ApiResolverCondition;
  * .<br/>
  * 
  * @author vemi/vemic.
- * @deprecated テスト用です。
  */
-@Deprecated
 public class DummyApiPlugin extends ApiPluginAbstract {
 
     protected static class Constants {
@@ -65,6 +61,7 @@ public class DummyApiPlugin extends ApiPluginAbstract {
          * @param ctx
          */
         public InDto(ApiResolverCondition ctx) {
+            @SuppressWarnings("unused")
             Map<Integer, Object> args = convertAndValidArgs(ctx);
         }
 

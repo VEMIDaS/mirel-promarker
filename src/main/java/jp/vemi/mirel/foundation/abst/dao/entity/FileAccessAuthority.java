@@ -3,10 +3,10 @@
  */
 package jp.vemi.mirel.foundation.abst.dao.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * ファイル管理

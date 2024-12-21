@@ -26,8 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.constructor.ConstructorException;
 
 import freemarker.core.ParseException;
@@ -115,12 +115,12 @@ public class TemplateEngineProcessor {
 
         // validate stencil-settings.yml
         final Tuple3<List<String>, List<String>, List<String>> validRets = validate();
-        if (false == validRets.getThird().isEmpty()) {
-            throw new MirelApplicationException(validRets.getThird());
+        if (false == validRets.getV3().isEmpty()) {
+            throw new MirelApplicationException(validRets.getV3());
         }
 
-        validRets.getSecond().forEach(logger::warning);
-        validRets.getSecond().forEach(logger::info);
+        validRets.getV2().forEach(logger::warning);
+        validRets.getV2().forEach(logger::info);
 
         // output dir
         final String outputDir = createOutputFileDir(StringUtils.isEmpty(generateId) ? createGenerateId() : generateId);
@@ -496,8 +496,9 @@ public class TemplateEngineProcessor {
         // load as stencil-settings.
         StencilSettingsYml settings = null;
         try(InputStream stream = new FileSystemResource(file).getInputStream()) {
-            settings = new Yaml(new Constructor(StencilSettingsYml.class))
-                .loadAs(stream, StencilSettingsYml.class);
+            LoaderOptions options = new LoaderOptions();
+            Yaml yaml = new Yaml(options);
+            settings = yaml.loadAs(stream, StencilSettingsYml.class);
         } catch (final ConstructorException e) {
             e.printStackTrace();
             String msg = "yamlの読込でエラーが発生しました。";

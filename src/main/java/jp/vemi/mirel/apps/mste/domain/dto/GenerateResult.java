@@ -5,31 +5,24 @@ package jp.vemi.mirel.apps.mste.domain.dto;
 
 import java.util.List;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import groovy.lang.Tuple2;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * 生成結果
  */
-@Setter
-@Getter
-@Builder
+@lombok.Data
+@lombok.Builder
+@lombok.NoArgsConstructor(force = true, staticName = "of")
+@lombok.AllArgsConstructor(staticName = "of")
 public class GenerateResult {
 
   /** files */
   // ファイイルID・ファイル名
-  public List<Tuple2<String, String>> files;
+  @lombok.Builder.Default
+  private List<Pair<String, String>> files = new java.util.ArrayList<>();
 
-  /**
-  * {@inheritDoc}
-  */
-  @Override
-  public String toString() {
-      return ToStringBuilder.reflectionToString(this);
-  }
+  /** errors */
+  @lombok.Builder.Default
+  private List<String> errors = new java.util.ArrayList<>();
 
 }

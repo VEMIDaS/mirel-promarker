@@ -1,5 +1,7 @@
 package jp.vemi.framework.util;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class InstanceUtil {
 
     @SuppressWarnings("unchecked")
@@ -10,8 +12,9 @@ public class InstanceUtil {
     public static <T> T newInstance(Class<T> clazz) {
         T result = null;
         try {
-            result = clazz.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            result = clazz.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         return result;

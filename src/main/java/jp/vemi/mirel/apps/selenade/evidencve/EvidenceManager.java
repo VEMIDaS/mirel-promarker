@@ -2,12 +2,8 @@ package jp.vemi.mirel.apps.selenade.evidencve;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +17,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import jp.vemi.framework.exeption.MessagingException;
-import jp.vemi.framework.util.StorageUtil;
 import jp.vemi.mirel.apps.selenade.dto.evidence.Evidence;
 import jp.vemi.mirel.apps.selenade.dto.evidence.QueryLog;
 

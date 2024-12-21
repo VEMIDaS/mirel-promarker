@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotEmpty;
+import  jakarta.servlet.http.HttpServletResponse;
+import  jakarta.validation.constraints.NotEmpty;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -113,7 +113,7 @@ public class DownloadController {
         if (paths.size() > 1) {
             fileName = "download.zip";
         } else if (paths.size() == 1) {
-            fileName = paths.stream().findFirst().get().getSecond();
+            fileName = paths.stream().findFirst().get().getV2();
         } else {
             // error
             return new ResponseEntity<>(apiResp, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -134,18 +134,18 @@ public class DownloadController {
         if(paths.size() > 1) {
             try (ZipOutputStream zostream = new ZipOutputStream(response.getOutputStream())) {
                 for (final Tuple3<String, String, Path> item : apiResp.model.paths) {
-                    File entryFile = item.getThird().toFile();
+                    File entryFile = item.getV3().toFile();
                     final ZipEntry entry = new ZipEntry(
-                            new File(entryFile.getParent()).getName() + "-" + item.getSecond());
+                            new File(entryFile.getParent()).getName() + "-" + item.getV2());
                     zostream.putNextEntry(entry);
-                    zostream.write(Files.readAllBytes(item.getThird()));
+                    zostream.write(Files.readAllBytes(item.getV3()));
                 }
             } catch (final IOException e) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else if (paths.size() == 1) {
             try {
-                Files.copy(paths.stream().findFirst().get().getThird(), response.getOutputStream());
+                Files.copy(paths.stream().findFirst().get().getV3(), response.getOutputStream());
             } catch (IOException e) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
