@@ -2,12 +2,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-MiplaApplication<promarker>",
+            "name": "mirelplatform",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "mainClass": "jp.vemi.mirel.MiplaApplication",
-            "projectName": "promarker",
             "args": ""
         }
     ]
