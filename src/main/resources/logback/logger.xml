@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <!-- Spring Framework のログレベル設定 -->
+    <logger name="org.springframework" level="INFO" />
+    <logger name="org.springframework.security" level="INFO" />
+
+    <!-- アプリケーションのログレベル設定 -->
+    <logger name="jp.vemi.mirel" level="INFO" />
+    
+    <!-- リクエストログ設定 -->
+    <logger name="request" level="DEBUG" additivity="false">
+        <appender-ref ref="REQUEST" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!-- 認証ログ設定 -->
+    <logger name="auth" level="DEBUG" additivity="false">
+        <appender-ref ref="AUTH" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+</included>
