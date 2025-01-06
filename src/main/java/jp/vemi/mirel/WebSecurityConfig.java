@@ -4,10 +4,9 @@
 package jp.vemi.mirel;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,42 +18,64 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import jp.vemi.framework.util.DatabaseUtil;
-import jp.vemi.mirel.security.JwtDecoderService;
+import jp.vemi.mirel.security.AuthenticationService;
 
 @Configuration
 @EnableWebSecurity
-@Order(30)
-@DependsOn("databaseUtil")
 public class WebSecurityConfig {
 
-    @Autowired
-    private JwtDecoderService jwtDecoderService;
+    @Value("${auth.method:jwt}")
+    private String authMethod;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+        AuthenticationService authenticationService) throws Exception {
         DatabaseUtil.initializeDefaultTenant();
+        
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authz -> authz
-                .anyRequest().authenticated()
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/auth/**", "/api/**")
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt
-                    .decoder(jwtDecoderService.getJwtDecoder("default")) // デフォルトのテナントIDを使用
-                )
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/auth/login").permitAll()
+                .requestMatchers("/auth/check").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .anyRequest().authenticated()
             );
+
+        if ("jwt".equals(authMethod) && authenticationService.isJwtSupported()) {
+            http.oauth2ResourceServer(oauth2 -> oauth2
+                    .jwt(jwt -> jwt
+                        .decoder(authenticationService.getJwtDecoder()))
+                )
+                .sessionManagement(session -> session
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        } else {
+            http.formLogin(form -> form
+                    .loginPage("/auth/login")
+                    .permitAll()
+                )
+                .logout(logout -> logout
+                    .logoutUrl("/auth/logout")
+                    .permitAll()
+                );
+        }
+
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.builder()
-            .username("dev")
-            .password(passwordEncoder.encode("dev"))
-            .roles("USER")
-            .build();
+                .username("dev")
+                .password(passwordEncoder.encode("dev"))
+                .roles("USER")
+                .build();
         return new InMemoryUserDetailsManager(user);
     }
 
@@ -64,11 +85,12 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = 
-            http.getSharedObject(AuthenticationManagerBuilder.class);
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
+            throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http
+                .getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.inMemoryAuthentication()
-            .withUser("dev").password(passwordEncoder.encode("dev")).roles("USER");
+                .withUser("dev").password(passwordEncoder.encode("dev")).roles("USER");
         return authenticationManagerBuilder.build();
     }
 }
