@@ -56,8 +56,8 @@ import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
  */
 @Service
 @Transactional
-@Generated(value = {"jp.vemi.ste.domain.engine.TemplateEngineProcessor"},
-    comments = "Generated from /mirel/service:191207A")
+@Generated(value = {
+        "jp.vemi.ste.domain.engine.TemplateEngineProcessor" }, comments = "Generated from /mirel/service:191207A")
 public class RunTestServiceImp implements RunTestService {
 
     /** {@link FileManagementRepository} */
@@ -65,7 +65,7 @@ public class RunTestServiceImp implements RunTestService {
     protected FileManagementRepository fileManagementRepository;
 
     /** 無視ファイルズ */
-    private static final String[] IGNORE_FILES = {".git", "README.md"};
+    private static final String[] IGNORE_FILES = { ".git", "README.md" };
 
     /**
      * {@inheritDoc}
@@ -82,7 +82,7 @@ public class RunTestServiceImp implements RunTestService {
 
     protected void exec(ApiRequest<RunTestParameter> parameter, ApiResponse<RunTestResult> resp) {
 
-        String appKey = (String)parameter.getModel().params.get(0).get("testId");
+        String appKey = (String) parameter.getModel().params.get(0).get("testId");
         ArTestRun testRun = new ArTestRun();
         List<File> files = FileUtil.getFiles(StorageUtil.getFile("apps/apprunner/defs/" + appKey), IGNORE_FILES);
         for (File file : files) {
@@ -93,7 +93,7 @@ public class RunTestServiceImp implements RunTestService {
             String fileName = file.getName();
 
             // Config.
-            if (fileName.startsWith("config") && isYaml(fileName))  {
+            if (fileName.startsWith("config") && isYaml(fileName)) {
                 ArConfig config;
                 try {
                     config = getYaml(file, ArConfig.class);
@@ -106,7 +106,7 @@ public class RunTestServiceImp implements RunTestService {
             }
 
             // Data.
-            if (fileName.startsWith("data-") && isYaml(fileName))  {
+            if (fileName.startsWith("data-") && isYaml(fileName)) {
                 ArData data;
                 try {
                     data = getYaml(file, ArData.class);
@@ -119,7 +119,7 @@ public class RunTestServiceImp implements RunTestService {
             }
 
             // Usecase.
-            if (fileName.startsWith("usecase-") && isYaml(fileName))  {
+            if (fileName.startsWith("usecase-") && isYaml(fileName)) {
                 ArUsecase usecase;
                 try {
                     usecase = getYaml(file, ArUsecase.class);
@@ -161,7 +161,6 @@ public class RunTestServiceImp implements RunTestService {
             return;
         }
 
-
         // Environment settings.
         Map<String, ArConfig.Environment> environmentTable = Maps.newLinkedHashMap();
         Map<String, ArConfig.Server> appTable = Maps.newLinkedHashMap();
@@ -176,9 +175,10 @@ public class RunTestServiceImp implements RunTestService {
 
         String run = createId();
         // Execute.
-        for (Map.Entry<String,ArScenario.Scenario> entry : testRun.getScenarios().entrySet()) {
+        for (Map.Entry<String, ArScenario.Scenario> entry : testRun.getScenarios().entrySet()) {
             ArScenario.Scenario scenario = entry.getValue();
-            EvidenceManager eManager = EvidenceManager.create("Run#" + run + " " + scenario.getId() + ":" + scenario.getName());
+            EvidenceManager eManager = EvidenceManager
+                    .create("Run#" + run + " " + scenario.getId() + ":" + scenario.getName());
             Map<String, SelenideDriver> selDriverTable = Maps.newLinkedHashMap();
             for (ArScenario.Usecase usecase : scenario.getUsecase()) {
                 Evidence evidence = Evidence.$evidenceHeader(usecase.getId());
@@ -217,12 +217,12 @@ public class RunTestServiceImp implements RunTestService {
                             String locator = action.getLocator();
                             Function function = FunctionResolver.resolveSingleFunction(locator);
                             SelenideElement sement = null;
-                            switch(function.getFunctionName()) {
+                            switch (function.getFunctionName()) {
                                 case "url":
                                     selDriver.open(function.getArgs().get("0").toString());
                                     break;
                                 case "xpath":
-                                    sement = selDriver.$x((String)function.getArgs().get("0"));
+                                    sement = selDriver.$x((String) function.getArgs().get("0"));
                                     break;
                                 default:
                                     break;
@@ -233,7 +233,7 @@ public class RunTestServiceImp implements RunTestService {
                                     resp.addErr("Selenide イベントの生成がされていません。アクション：" + action.getName());
                                 } else {
                                     // input or click.
-                                    switch(action.getType()) {
+                                    switch (action.getType()) {
                                         case "input":
                                             String value = action.getValue();
                                             resolve(value);
@@ -254,11 +254,11 @@ public class RunTestServiceImp implements RunTestService {
                                             }
                                             break;
                                         case "click":
-                                        if (sement.exists()) {
-                                            sement.click();
-                                        } else {
-                                            log("click function is not available.");
-                                        }
+                                            if (sement.exists()) {
+                                                sement.click();
+                                            } else {
+                                                log("click function is not available.");
+                                            }
                                             break;
                                         case "select":
                                             break;
@@ -269,11 +269,13 @@ public class RunTestServiceImp implements RunTestService {
                             }
                             if (Boolean.TRUE == action.getSaveScreen() && sement != null && sement.exists()) {
                                 File file = sement.screenshot();
-                                eManager.append(evidence, ImageFile.as(file, StorageUtil.getBaseDir() + "/apps/apprunner/testrun/" + run + "/evidence/component/"));
+                                eManager.append(evidence, ImageFile.as(file, StorageUtil.getBaseDir()
+                                        + "/apps/apprunner/testrun/" + run + "/evidence/component/"));
                             }
                         }
                         File stepScreenshot = selDriver.screenshot(OutputType.FILE);
-                        eManager.append(evidence, ImageFile.as(stepScreenshot, StorageUtil.getBaseDir() + "/apps/apprunner/testrun/" + run + "/evidence/"));
+                        eManager.append(evidence, ImageFile.as(stepScreenshot,
+                                StorageUtil.getBaseDir() + "/apps/apprunner/testrun/" + run + "/evidence/"));
                     }
                 }
             }
@@ -295,7 +297,7 @@ public class RunTestServiceImp implements RunTestService {
             return action;
         }
 
-        for (ArSelenadePage.Action pageAction : page.getAction()){
+        for (ArSelenadePage.Action pageAction : page.getAction()) {
             if (false == action.getActionTemplate().equals(pageAction.getId())) {
                 continue;
             }
@@ -325,7 +327,6 @@ public class RunTestServiceImp implements RunTestService {
             return;
         }
 
-        
         if (StringUtils.isEmpty(config.getConfig().getId())) {
             resp.errs.add(errInFile("configのIDを設定してください。", fileName));
         }
@@ -459,13 +460,14 @@ public class RunTestServiceImp implements RunTestService {
         }
         return sBuilder.toString();
     }
+
     /**
      * 
      * @param type
      * @return
      */
     private Boolean isAction(String type) {
-        switch(type) {
+        switch (type) {
             case "input":
             case "click":
             case "select":
@@ -474,6 +476,7 @@ public class RunTestServiceImp implements RunTestService {
                 return false;
         }
     }
+
     protected ArUsecase.Usecase mergeUsecase(ArScenario.Usecase usecase, ArUsecase.Usecase defaultUsecase) {
         if (null == defaultUsecase) {
             return new ArUsecase.Usecase();
@@ -482,9 +485,9 @@ public class RunTestServiceImp implements RunTestService {
         return defaultUsecase;
     }
 
-
     /**
      * Get object from yaml file.<br/>
+     * 
      * @param <T>
      * @param file
      * @param clazz
@@ -492,14 +495,14 @@ public class RunTestServiceImp implements RunTestService {
      */
     protected <T> T getYaml(File file, Class<T> clazz) {
         T object;
-        try(InputStream stream = new FileSystemResource(file).getInputStream()) {
+        try (InputStream stream = new FileSystemResource(file).getInputStream()) {
             LoaderOptions options = new LoaderOptions();
             Yaml yaml = new Yaml(options);
             object = yaml.loadAs(stream, clazz);
         } catch (final ConstructorException e) {
             e.printStackTrace();
             String msg = "yamlの読込でエラーが発生しました。";
-            if(isDebugMode()) {
+            if (isDebugMode()) {
                 msg += "debug log:" + e.getLocalizedMessage();
             }
             throw new MirelApplicationException(msg, e);
@@ -535,7 +538,7 @@ public class RunTestServiceImp implements RunTestService {
     }
 
     private static void log(String... messages) {
-        if (0 == messages.length ) {
+        if (0 == messages.length) {
             return;
         }
         Arrays.asList(messages).stream().forEach(System.out::println);
