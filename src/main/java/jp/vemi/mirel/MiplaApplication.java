@@ -9,12 +9,18 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@EntityScan
-@EnableJpaRepositories
-@ComponentScan(basePackages = {"jp.vemi.framework.util", "jp.vemi.mirel"})
+@EntityScan(basePackages = { "jp.vemi.mirel", "jp.vemi.framework" })
+@EnableJpaRepositories(basePackages = { "jp.vemi.mirel", "jp.vemi.framework" })
+@ComponentScan(basePackages = {
+        "jp.vemi.framework.util",
+        "jp.vemi.framework.security",
+        "jp.vemi.mirel",
+        "jp.vemi.mirel.config",
+        "jp.vemi.mirel.security"
+})
 public class MiplaApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MiplaApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MiplaApplication.class, args);
+    }
 }

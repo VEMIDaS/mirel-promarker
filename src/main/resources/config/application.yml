@@ -22,6 +22,14 @@ spring:
   spring-boot:
     run:
       jvmArguments:: -Xint
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    jp.vemi.mirel: DEBUG
 mipla2:
+  security:
+    api:
+      enabled: false
   config:
     storage-dir: "C:\\data\\m2\\storage"
