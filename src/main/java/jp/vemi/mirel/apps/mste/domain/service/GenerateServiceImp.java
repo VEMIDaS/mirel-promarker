@@ -59,7 +59,7 @@ public class GenerateServiceImp implements GenerateService {
             List<String> errs = validate(once);
             if (false == CollectionUtils.isEmpty(errs)) {
                 // has err
-                resp.errs.addAll(errs);
+                resp.addErrors(errs);
                 return;
             }
 
@@ -89,7 +89,7 @@ public class GenerateServiceImp implements GenerateService {
                     engine.appendContext(file(value, resp));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    resp.errs.add(e.getLocalizedMessage());
+                    resp.addError(e.getLocalizedMessage());
                     return;
                 }
             }
@@ -100,11 +100,11 @@ public class GenerateServiceImp implements GenerateService {
                 filePath = engine.execute();
             } catch (MessagingException e) {
                 e.printStackTrace();
-                resp.errs.addAll(e.messages);
+                resp.addErrors(e.messages);
                 return;
             } catch (Exception e) {
                 e.printStackTrace();
-                resp.errs.add(e.getLocalizedMessage());
+                resp.addError(e.getLocalizedMessage());
                 return;
             }
 
@@ -115,7 +115,7 @@ public class GenerateServiceImp implements GenerateService {
 
         });
 
-        resp.setModel(GenerateResult.builder().files(retItems).build());
+        resp.setData(GenerateResult.builder().files(retItems).build());
 
         return resp;
 
@@ -129,13 +129,13 @@ public class GenerateServiceImp implements GenerateService {
             item = fileManagementRepository.findById(fileId).get();
         } catch (NoSuchElementException e) {
             e.printStackTrace();
-            resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
+            resp.addError("ファイルが見つかりません。ファイル管理ID：" + fileId);
             return once;
         }
 
         // file record is null.
         if (null == item) {
-            resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
+            resp.addError("ファイルが見つかりません。ファイル管理ID：" + fileId);
             return once;
         }
 
@@ -151,7 +151,8 @@ public class GenerateServiceImp implements GenerateService {
     /**
      * validate. <br/>
      * 
-     * @param param パラメータ
+     * @param param
+     *            パラメータ
      * @return メッセージ一覧
      */
     public List<String> validate(Map<String, Object> param) {

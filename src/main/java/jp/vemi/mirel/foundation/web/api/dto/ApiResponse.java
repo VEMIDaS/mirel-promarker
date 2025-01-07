@@ -3,50 +3,51 @@
  */
 package jp.vemi.mirel.foundation.web.api.dto;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.ArrayList;
 
 /**
- * APIレスポンスの共通クラスです .<br/>
+ * APIレスポンスのクラスです .<br/>
  */
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@lombok.Data
+@lombok.NoArgsConstructor
+@lombok.AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+@lombok.Builder
 public class ApiResponse<T> {
 
-    public T model;
+    /** レスポンスデータ */
+    private T data;
 
-    @Builder.Default
-    public List<String> infos = new ArrayList<>();
+    /** メッセージリスト */
+    @lombok.Builder.Default
+    private List<String> messages = new ArrayList<>();
 
-    @Builder.Default
-    public List<String> errs = new ArrayList<>();
+    /** エラーメッセージリスト */
+    @lombok.Builder.Default
+    private List<String> errors = new ArrayList<>();
 
-    public void addErr(final String message) {
-        this.errs.add(message);
+    /** エラー追加 */
+    public void addError(String message) {
+        this.errors.add(message);
     }
 
-    /**
-     * default constructor.
-     */
-    public ApiResponse(T model) {
-        this.model = model;
+    /** メッセージ追加 */
+    public void addMessage(String message) {
+        this.messages.add(message);
     }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+
+    /** エラーリスト追加 */
+    public void addErrors(List<String> messages) {
+        this.errors.addAll(messages);
+    }
+
+    /** メッセージリスト追加 */
+    public void addMessages(List<String> messages) {
+        this.messages.addAll(messages);
+    }
+
+    /** データ設定コンストラクタ */
+    public ApiResponse(T data) {
+        this.data = data;
     }
 }

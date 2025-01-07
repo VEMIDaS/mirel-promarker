@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import  jakarta.servlet.http.HttpServletResponse;
-import  jakarta.validation.constraints.NotEmpty;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -57,17 +57,18 @@ public class DownloadController {
 
     /**
      * get.<br/>
+     * 
      * @param path
      * @param response
      * @return {@link ResponseEntity}
      */
-    @RequestMapping(path = "commons/dlsite/{path}", method=RequestMethod.GET)
+    @RequestMapping(path = "commons/dlsite/{path}", method = RequestMethod.GET)
     public ResponseEntity<ApiResponse<FileDownloadResult>> index4Get(@NotEmpty @PathVariable String path,
-    final HttpServletResponse response) {
+            final HttpServletResponse response) {
         String[] spliteds = path.split(",");
 
         List<Map<String, Object>> files = Lists.newArrayList();
-        for(String splited : spliteds) {
+        for (String splited : spliteds) {
             Map<String, Object> fileitem = Maps.newLinkedHashMap();
             fileitem.put("fileId", splited);
             files.add(fileitem);
@@ -80,6 +81,7 @@ public class DownloadController {
 
     /**
      * post. <br/>
+     * 
      * @param request
      * @param response
      * @return
@@ -87,29 +89,30 @@ public class DownloadController {
     @RequestMapping(path = "commons/download")
     public ResponseEntity<ApiResponse<FileDownloadResult>> index(@RequestBody final Map<String, Object> request,
             final HttpServletResponse response) {
-                return miho(request, response);
+        return miho(request, response);
     }
 
     /**
      * download controller (core).<br/>
+     * 
      * @param request
      * @param response
      * @return {@link ResponseEntity}
      */
     protected ResponseEntity<ApiResponse<FileDownloadResult>> miho(Map<String, Object> request,
-    final HttpServletResponse response) {
+            final HttpServletResponse response) {
 
         final FileDownloadParameter parameter = createParameter(request);
         final ApiResponse<FileDownloadResult> apiResp = service
                 .invoke(new ApiRequest<FileDownloadParameter>(parameter));
 
-        if (false == apiResp.errs.isEmpty()) {
+        if (false == apiResp.getErrors().isEmpty()) {
             return new ResponseEntity<>(apiResp, HttpStatus.OK);
         }
 
         // decide file name
         String fileName = "";
-        final List<Tuple3<String, String, Path>> paths = apiResp.model.paths;
+        final List<Tuple3<String, String, Path>> paths = apiResp.getData().paths;
         if (paths.size() > 1) {
             fileName = "download.zip";
         } else if (paths.size() == 1) {
@@ -131,9 +134,9 @@ public class DownloadController {
         response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.addHeader("Content-Disposition", "attachment; filename=" + encodedFileName);
 
-        if(paths.size() > 1) {
+        if (paths.size() > 1) {
             try (ZipOutputStream zostream = new ZipOutputStream(response.getOutputStream())) {
-                for (final Tuple3<String, String, Path> item : apiResp.model.paths) {
+                for (final Tuple3<String, String, Path> item : apiResp.getData().paths) {
                     File entryFile = item.getV3().toFile();
                     final ZipEntry entry = new ZipEntry(
                             new File(entryFile.getParent()).getName() + "-" + item.getV2());
@@ -153,12 +156,13 @@ public class DownloadController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return  new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
     /**
      * create parameter.<br/>
+     * 
      * @param requestMap
      * @return {@link FileDownloadParameter}
      */

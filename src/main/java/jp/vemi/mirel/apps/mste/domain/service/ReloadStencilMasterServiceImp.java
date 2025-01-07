@@ -45,7 +45,7 @@ import jp.vemi.ste.domain.engine.TemplateEngineProcessor;
  */
 @Service
 @Transactional
-public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService{
+public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService {
 
     /** {@link MsteStencilRepository ステンシルマスタ} */
     @Autowired
@@ -53,7 +53,7 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
 
     @Autowired
     protected FileManagementRepository fileManagementRepository;
-  
+
     /**
      * {@inheritDoc}
      */
@@ -63,7 +63,7 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
         ApiResponse<ReloadStencilMasterResult> resp = ApiResponse.<ReloadStencilMasterResult>builder().build();
 
         this.read();
-        resp.setModel(ReloadStencilMasterResult.builder().build());
+        resp.setData(ReloadStencilMasterResult.builder().build());
 
         return resp;
 
@@ -105,17 +105,17 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
 
         // save stencil record.
         for (Entry<String, String> catentry : categories.entrySet()) {
-        MsteStencil entry = new MsteStencil();
-        entry.setStencilCd(catentry.getKey());
-        entry.setStencilName(catentry.getValue());
-        entry.setItemKind("0");
-        entry.setSort(0);
-        stencilRepository.save(entry);
+            MsteStencil entry = new MsteStencil();
+            entry.setStencilCd(catentry.getKey());
+            entry.setStencilName(catentry.getValue());
+            entry.setItemKind("0");
+            entry.setSort(0);
+            stencilRepository.save(entry);
         }
 
         String fileDir = dir + "/_filemanagement";
         File[] filemanagementFiles = new File(fileDir).listFiles();
-        for(File file: filemanagementFiles) {
+        for (File file : filemanagementFiles) {
             File[] filesInUuid = file.listFiles();
 
             if (0 == filesInUuid.length) {
@@ -137,15 +137,16 @@ public class ReloadStencilMasterServiceImp implements ReloadStencilMasterService
     /**
      * read Stencil settings file.
      * 
-     * @param file Setting file (Yaml)
+     * @param file
+     *            Setting file (Yaml)
      * @return {@link StencilSettingsYml ステンシル定義YAML}
      */
-    protected StencilSettingsYml readYaml (File file) {
+    protected StencilSettingsYml readYaml(File file) {
         StencilSettingsYml settings = null;
-        try(InputStream stream = new FileSystemResource(file).getInputStream()) {
+        try (InputStream stream = new FileSystemResource(file).getInputStream()) {
             LoaderOptions options = new LoaderOptions();
             settings = new Yaml(new SafeConstructor(options))
-                .loadAs(stream, StencilSettingsYml.class);
+                    .loadAs(stream, StencilSettingsYml.class);
         } catch (final ConstructorException e) {
             e.printStackTrace();
             String msg = "yamlの読込でエラーが発生しました。";

@@ -35,14 +35,14 @@ public class ApiController {
 
     @RequestMapping("/{path}")
     public ResponseEntity<ApiResponse<?>> index(@RequestBody Map<String, Object> request,
-        @PathVariable String path) {
+            @PathVariable String path) {
 
         String apiName = path + "Api";
 
         if (false == apis.containsKey(apiName)) {
-            return new ResponseEntity<>(ApiResponse.builder().errs(
-                Lists.newArrayList(apiName + " api not found.")).build(),
-                HttpStatus.OK);
+            return new ResponseEntity<>(ApiResponse.builder().errors(
+                    Lists.newArrayList(apiName + " api not found.")).build(),
+                    HttpStatus.OK);
         }
 
         MsteApi api = apis.get(apiName);
@@ -54,9 +54,9 @@ public class ApiController {
 
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(ApiResponse.builder().errs(
-                Lists.newArrayList(e.getLocalizedMessage())).build(),
-                HttpStatus.OK);
+            return new ResponseEntity<>(ApiResponse.builder().errors(
+                    Lists.newArrayList(e.getLocalizedMessage())).build(),
+                    HttpStatus.OK);
         }
 
         // init state

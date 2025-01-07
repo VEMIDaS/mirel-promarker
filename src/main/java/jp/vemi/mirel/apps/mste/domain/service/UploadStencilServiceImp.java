@@ -16,7 +16,7 @@ import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
  */
 @Service
 @Transactional
-public class UploadStencilServiceImp implements UploadStencilService{
+public class UploadStencilServiceImp implements UploadStencilService {
 
     /**
      * {@inheritDoc}
@@ -27,10 +27,9 @@ public class UploadStencilServiceImp implements UploadStencilService{
         ApiResponse<UploadStencilResult> resp = ApiResponse.<UploadStencilResult>builder().build();
 
         // TODO concrete.
-        resp.setModel(UploadStencilResult.builder().build());
+        resp.setData(UploadStencilResult.builder().build());
 
         return resp;
 
     }
 }
-

@@ -74,17 +74,26 @@ public class RunTestServiceImp implements RunTestService {
     public ApiResponse<RunTestResult> invoke(ApiRequest<RunTestParameter> parameter) {
 
         ApiResponse<RunTestResult> resp = ApiResponse.<RunTestResult>builder().build();
-        resp.setModel(RunTestResult.builder().build());
+        resp.setData(RunTestResult.builder().build());
         exec(parameter, resp);
         return resp;
 
     }
 
     protected void exec(ApiRequest<RunTestParameter> parameter, ApiResponse<RunTestResult> resp) {
+        final String testId = (String) parameter.getModel().params.get(0).get("testId");
+        if (StringUtils.isEmpty(testId)) {
+            resp.addError("testId が指定されていません。");
+            return;
+        }
 
-        String appKey = (String) parameter.getModel().params.get(0).get("testId");
+        List<File> files = FileUtil.getFiles(StorageUtil.getFile("apps/apprunner/defs/" + testId), IGNORE_FILES);
+        if (CollectionUtils.isEmpty(files)) {
+            resp.addError("テスト定義ファイルが見つかりません。");
+            return;
+        }
+
         ArTestRun testRun = new ArTestRun();
-        List<File> files = FileUtil.getFiles(StorageUtil.getFile("apps/apprunner/defs/" + appKey), IGNORE_FILES);
         for (File file : files) {
             if (false != file.isDirectory()) {
                 continue;
@@ -101,7 +110,7 @@ public class RunTestServiceImp implements RunTestService {
                     testRun.addConfig(config);
                     continue;
                 } catch (Throwable e) {
-                    resp.addErr(e.getLocalizedMessage());
+                    resp.addError(e.getLocalizedMessage());
                 }
             }
 
@@ -114,7 +123,7 @@ public class RunTestServiceImp implements RunTestService {
                     testRun.addData(data);
                     continue;
                 } catch (Throwable e) {
-                    resp.addErr(e.getLocalizedMessage());
+                    resp.addError(e.getLocalizedMessage());
                 }
             }
 
@@ -127,7 +136,7 @@ public class RunTestServiceImp implements RunTestService {
                     testRun.addUsecase(usecase);
                     continue;
                 } catch (Throwable e) {
-                    resp.addErr(e.getLocalizedMessage());
+                    resp.addError(e.getLocalizedMessage());
                 }
             }
 
@@ -140,7 +149,7 @@ public class RunTestServiceImp implements RunTestService {
                     testRun.addPage(page);
                     continue;
                 } catch (Throwable e) {
-                    resp.addErr(e.getLocalizedMessage());
+                    resp.addError(e.getLocalizedMessage());
                 }
             }
 
@@ -152,12 +161,12 @@ public class RunTestServiceImp implements RunTestService {
                     validScenario(scenario, resp, fileName);
                     testRun.addScenario(scenario);
                 } catch (Throwable e) {
-                    resp.addErr(e.getLocalizedMessage());
+                    resp.addError(e.getLocalizedMessage());
                 }
             }
         }
 
-        if (false == CollectionUtils.isEmpty(resp.getErrs())) {
+        if (false == CollectionUtils.isEmpty(resp.getErrors())) {
             return;
         }
 
@@ -194,7 +203,7 @@ public class RunTestServiceImp implements RunTestService {
                         ArUsecase.Selenade selenidePlugin = step.getPlugin().getSelenade();
                         ArSelenadePage.Page page = testRun.getPages().get(selenidePlugin.getPageId());
                         if (null == page) {
-                            resp.errs.add(selenidePlugin.getPageId() + " の Page plugin が見つかりません。");
+                            resp.addError(selenidePlugin.getPageId() + " の Page plugin が見つかりません。");
                             continue;
                         }
 
@@ -230,7 +239,7 @@ public class RunTestServiceImp implements RunTestService {
 
                             if (isAction(action.getType())) { // TODO fix type condition
                                 if (null == sement) {
-                                    resp.addErr("Selenide イベントの生成がされていません。アクション：" + action.getName());
+                                    resp.addError("Selenide イベントの生成がされていません。アクション：" + action.getName());
                                 } else {
                                     // input or click.
                                     switch (action.getType()) {
@@ -323,12 +332,12 @@ public class RunTestServiceImp implements RunTestService {
 
     private void validConfig(ArConfig config, ApiResponse<RunTestResult> resp, String fileName) {
         if (null == config.getConfig()) {
-            resp.errs.add(errInFile("configブロックを作成してください。", fileName));
+            resp.addError(errInFile("configブロックを作成してください。", fileName));
             return;
         }
 
         if (StringUtils.isEmpty(config.getConfig().getId())) {
-            resp.errs.add(errInFile("configのIDを設定してください。", fileName));
+            resp.addError(errInFile("configのIDを設定してください。", fileName));
         }
 
         List<ArConfig.Environment> environments = config.getConfig().getEnvironment();
@@ -336,7 +345,7 @@ public class RunTestServiceImp implements RunTestService {
             Integer environmentIdx = 0;
             for (ArConfig.Environment environment : environments) {
                 if (StringUtils.isEmpty(environment.getId())) {
-                    resp.errs.add(errInFile((environmentIdx + 1) + "件目のenvironmentにIDがありません。", fileName));
+                    resp.addError(errInFile((environmentIdx + 1) + "件目のenvironmentにIDがありません。", fileName));
                 }
             }
         }
@@ -344,12 +353,12 @@ public class RunTestServiceImp implements RunTestService {
 
     private void validScenario(ArScenario scenario, ApiResponse<RunTestResult> resp, String fileName) {
         if (null == scenario.getScenario()) {
-            resp.errs.add(errInFile("scenarioブロックを作成してください。", fileName));
+            resp.addError(errInFile("scenarioブロックを作成してください。", fileName));
             return;
         }
 
         if (StringUtils.isEmpty(scenario.getScenario().getId())) {
-            resp.errs.add(errInFile("scenarioのIDを設定してください。", fileName));
+            resp.addError(errInFile("scenarioのIDを設定してください。", fileName));
         }
 
         List<ArScenario.Usecase> usecases = scenario.getScenario().getUsecase();
@@ -357,7 +366,7 @@ public class RunTestServiceImp implements RunTestService {
             Integer usecaseIdx = 0;
             for (ArScenario.Usecase usecase : usecases) {
                 if (StringUtils.isEmpty(usecase.getId())) {
-                    resp.errs.add(errInFile((usecaseIdx + 1) + "件目のusecaseにIDがありません。", fileName));
+                    resp.addError(errInFile((usecaseIdx + 1) + "件目のusecaseにIDがありません。", fileName));
                 }
             }
         }
@@ -365,12 +374,12 @@ public class RunTestServiceImp implements RunTestService {
 
     private void validPage(ArSelenadePage page, ApiResponse<RunTestResult> resp, String fileName) {
         if (null == page.getPage()) {
-            resp.errs.add(errInFile("pageブロックを作成してください。", fileName));
+            resp.addError(errInFile("pageブロックを作成してください。", fileName));
             return;
         }
 
         if (StringUtils.isEmpty(page.getPage().getId())) {
-            resp.errs.add(errInFile("page の ID を設定してください。", fileName));
+            resp.addError(errInFile("page の ID を設定してください。", fileName));
         }
 
         List<ArSelenadePage.Action> actions = page.getPage().getAction();
@@ -378,7 +387,7 @@ public class RunTestServiceImp implements RunTestService {
             Integer actionIdx = 0;
             for (ArSelenadePage.Action action : actions) {
                 if (StringUtils.isEmpty(action.getId())) {
-                    resp.errs.add(errInFile((actionIdx + 1) + "件目の action にIDがありません。", fileName));
+                    resp.addError(errInFile((actionIdx + 1) + "件目の action にIDがありません。", fileName));
                 }
             }
         }
@@ -386,20 +395,20 @@ public class RunTestServiceImp implements RunTestService {
 
     private void validUsecase(ArUsecase usecase, ApiResponse<RunTestResult> resp, String fileName) {
         if (null == usecase.getUsecase() && null == usecase.getUsecaseGroup()) {
-            resp.errs.add(errInFile("usecase または usecaseGroup ブロックを作成してください。", fileName));
+            resp.addError(errInFile("usecase または usecaseGroup ブロックを作成してください。", fileName));
             return;
         }
 
         if (null != usecase.getUsecase()) {
             if (StringUtils.isEmpty(usecase.getUsecase().getId())) {
-                resp.errs.add(errInFile("usecase の ID を設定してください。", fileName));
+                resp.addError(errInFile("usecase の ID を設定してください。", fileName));
             } else {
                 List<ArUsecase.Step> steps = usecase.getUsecase().getStep();
                 if (false == CollectionUtils.isEmpty(steps)) {
                     Integer stepIdx = 0;
                     for (ArUsecase.Step step : steps) {
                         if (StringUtils.isEmpty(step.getId())) {
-                            resp.errs.add(errInFile((stepIdx + 1) + "件目の step に ID がありません。", fileName));
+                            resp.addError(errInFile((stepIdx + 1) + "件目の step に ID がありません。", fileName));
                         }
                     }
                 }
@@ -412,7 +421,7 @@ public class RunTestServiceImp implements RunTestService {
                 boolean isBadUsecaseGroup = false;
                 if (StringUtils.isEmpty(usecaseGroup.getId())) {
                     isBadUsecaseGroup = true;
-                    resp.errs.add(errInFile((usecaseGroupIdx + 1) + "件目の usecaseGroup に ID がありません。", fileName));
+                    resp.addError(errInFile((usecaseGroupIdx + 1) + "件目の usecaseGroup に ID がありません。", fileName));
                 }
 
                 if (false == isBadUsecaseGroup) {
@@ -422,7 +431,7 @@ public class RunTestServiceImp implements RunTestService {
                             Integer stepIdx = 0;
                             for (ArUsecase.Step step : steps) {
                                 if (StringUtils.isEmpty(step.getId())) {
-                                    resp.errs.add(errInFile((stepIdx + 1) + "件目の step に ID がありません。UsecaseGroup："
+                                    resp.addError(errInFile((stepIdx + 1) + "件目の step に ID がありません。UsecaseGroup："
                                             + usecaseGroup.getId() + "、Usecase：" + usecase2.getId(), fileName));
                                 }
                             }
@@ -435,11 +444,11 @@ public class RunTestServiceImp implements RunTestService {
 
     private void validData(ArData data, ApiResponse<RunTestResult> resp, String fileName) {
         if (null == data.getDataTemplate()) {
-            resp.errs.add(errInFile("dataTemplate ブロックを作成してください。", fileName));
+            resp.addError(errInFile("dataTemplate ブロックを作成してください。", fileName));
             return;
         }
         if (StringUtils.isEmpty(data.getDataTemplate().getId())) {
-            resp.errs.add(errInFile("dataTemplate のIDを設定してください。", fileName));
+            resp.addError(errInFile("dataTemplate のIDを設定してください。", fileName));
         }
         // TODO impl.
     }

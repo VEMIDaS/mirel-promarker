@@ -28,81 +28,81 @@ import jp.vemi.mirel.foundation.web.api.dto.ApiResponse;
 @Service
 public class FileDownloadServiceImpl implements FileDownloadService {
 
-  /** {@link FileManagementRepository} */
-  @Autowired
-  protected FileManagementRepository fileManagementRepository;
+    /** {@link FileManagementRepository} */
+    @Autowired
+    protected FileManagementRepository fileManagementRepository;
 
-  protected Date getToday() {
-    return new Date();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ApiResponse<FileDownloadResult> invoke(ApiRequest<FileDownloadParameter> parameter) {
-
-    ApiResponse<FileDownloadResult> resp = new ApiResponse<>();
-    resp.setModel(new FileDownloadResult());
-
-    final Date today = getToday();
-    final List<FileManagement> fmItems = Lists.newArrayList();
-
-    parameter.getModel().getFileIds().forEach(fileId -> {
-
-      FileManagement item;
-      try {
-        item = fileManagementRepository.findById(fileId).get();
-      } catch (NoSuchElementException e) {
-        e.printStackTrace();
-        resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
-        return;
-      }
-
-      // file record is null.
-      if (null == item) {
-        resp.errs.add("ファイルが見つかりません。ファイル管理ID：" + fileId);
-        return;
-      }
-
-      // file expired.
-      if (null != item.getExpireDate() && today.after(item.getExpireDate())) {
-        resp.errs.add("ファイルは有効期間を過ぎました。ファイル名：" + item.fileName);
-        return;
-      }
-
-      // file deleted.
-      if (item.getDeleteFlag()) {
-        resp.errs.add("ファイルは既に削除されています。ファイル名：" + item.fileName);
-        return;
-      }
-
-      // ok.
-      fmItems.add(item);
-    });
-
-    // file not found.
-    if (fmItems.isEmpty()) {
-      resp.errs.add("取得可能なファイルがありませんでした。");
-      return resp;
+    protected Date getToday() {
+        return new Date();
     }
 
-    // transfer to File model
-    fmItems.forEach(item -> {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ApiResponse<FileDownloadResult> invoke(ApiRequest<FileDownloadParameter> parameter) {
 
-      Path path = Paths.get(item.getFilePath());
+        ApiResponse<FileDownloadResult> resp = new ApiResponse<>();
+        resp.setData(new FileDownloadResult());
 
-      // file not exists
-      if (false == path.toFile().exists()) {
-        resp.errs.add("ファイルがストレージから取得できみせんでした。ファイル名：" + item.fileName);
-        return;
-      }
+        final Date today = getToday();
+        final List<FileManagement> fmItems = Lists.newArrayList();
 
-      // ok.
-      resp.model.paths.add(new Tuple3<String, String, Path>(item.getFileId(), item.getFileName(), path));
-    });
+        parameter.getModel().getFileIds().forEach(fileId -> {
 
-    return resp;
-  }
+            FileManagement item;
+            try {
+                item = fileManagementRepository.findById(fileId).get();
+            } catch (NoSuchElementException e) {
+                e.printStackTrace();
+                resp.addError("ファイルが見つかりません。ファイル管理ID：" + fileId);
+                return;
+            }
+
+            // file record is null.
+            if (null == item) {
+                resp.addError("ファイルが見つかりません。ファイル管理ID：" + fileId);
+                return;
+            }
+
+            // file expired.
+            if (null != item.getExpireDate() && today.after(item.getExpireDate())) {
+                resp.addError("ファイルは有効期間を過ぎました。ファイル名：" + item.fileName);
+                return;
+            }
+
+            // file deleted.
+            if (item.getDeleteFlag()) {
+                resp.addError("ファイルは既に削除されています。ファイル名：" + item.fileName);
+                return;
+            }
+
+            // ok.
+            fmItems.add(item);
+        });
+
+        // file not found.
+        if (fmItems.isEmpty()) {
+            resp.addError("取得可能なファイルがありませんでした。");
+            return resp;
+        }
+
+        // transfer to File model
+        fmItems.forEach(item -> {
+
+            Path path = Paths.get(item.getFilePath());
+
+            // file not exists
+            if (false == path.toFile().exists()) {
+                resp.addError("ファイルがストレージから取得できみせんでした。ファイル名：" + item.fileName);
+                return;
+            }
+
+            // ok.
+            resp.getData().paths.add(new Tuple3<String, String, Path>(item.getFileId(), item.getFileName(), path));
+        });
+
+        return resp;
+    }
 
 }
