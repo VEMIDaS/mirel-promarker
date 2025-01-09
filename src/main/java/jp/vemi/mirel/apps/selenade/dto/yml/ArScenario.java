@@ -6,56 +6,48 @@ package jp.vemi.mirel.apps.selenade.dto.yml;
 import java.util.List;
 import java.util.Map;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
  * Scenario.<br/>
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@lombok.Data
+@lombok.NoArgsConstructor
 public class ArScenario {
 
-    Scenario scenario;
-    Data data;
+    private Scenario scenario;
+    private Data data;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Scenario {
-        String id;
-        String name;
-        String note;
-        List<Usecase> usecase;
+        private String id;
+        private String name;
+        private String note;
+        private List<Usecase> usecase;
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Data {
-        String id;
-        List<DataVariable> variable;
+        private String id;
+        private List<DataVariable> variable;
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Usecase {
-        String id;
-        String name;
-        Integer sort;
-        String usecaseId;
+        private String id;
+        private String name;
+        private Integer sort;
+        private String usecaseId;
     }
-    @Getter
-    @Setter
-    @NoArgsConstructor
+
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class DataVariable {
-        String id;
-        String name;
-        String type;
-        String defaultValue;
-        List<Map<String, Object>> valuePattern;
+        private String id;
+        private String name;
+        private String type;
+        private String defaultValue;
+        private List<Map<String, Object>> valuePattern;
     }
 }

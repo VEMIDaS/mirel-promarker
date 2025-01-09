@@ -6,49 +6,41 @@ package jp.vemi.mirel.apps.selenade.dto.yml;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
  * Usecase.
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@lombok.Data
+@lombok.NoArgsConstructor
 public class ArUsecase {
 
-    Usecase usecase;
-    List<UsecaseGroup> usecaseGroup;
+    private Usecase usecase;
+    private List<UsecaseGroup> usecaseGroup;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Usecase {
-        String id;
-        String name;
-        String note;
-        List<Step> step = Lists.newArrayList();
+        private String id;
+        private String name;
+        private String note;
+        private List<Step> step = new java.util.ArrayList<>();
     }
+
     /**
      * Operation.<br/>
      */
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Step {
-        String id;
-        String name;
-        String note;
-        Plugin plugin;
+        private String id;
+        private String name;
+        private String note;
+        private Plugin plugin;
 
         public boolean isSelenade() {
             if (null == this.plugin) {
                 return false;
             }
-            
+
             if (null == this.plugin.selenade) {
                 return false;
             }
@@ -57,34 +49,34 @@ public class ArUsecase {
         }
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class UsecaseGroup {
-        String id;
-        String name;
-        List<Usecase> usecase;
+        private String id;
+        private String name;
+        private List<Usecase> usecase;
     }
 
-    @Getter
-    @Setter
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Plugin {
-        Selenade selenade;
+        private Selenade selenade;
     }
 
-    @Getter
-    @Setter
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Selenade {
-        String pageId;
-        List<Action> action;
+        private String pageId;
+        private List<Action> action;
     }
 
-    @Getter
-    @Setter
+    @lombok.Data
+    @lombok.EqualsAndHashCode(callSuper = true)
+    @lombok.NoArgsConstructor
     public static class Action extends ArSelenadePage.Action {
-        String api;
-        String actionTemplate;
-        Boolean isSaveScreen;
-        Map<String, Object> parameter;
+        private String api;
+        private String actionTemplate;
+        private Boolean isSaveScreen;
+        private Map<String, Object> parameter;
     }
 }

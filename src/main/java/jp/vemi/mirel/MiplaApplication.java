@@ -1,3 +1,6 @@
+/*
+ * Copyright(c) 2015-2025 vemi/mirelplatform.
+ */
 package jp.vemi.mirel;
 
 import org.springframework.boot.SpringApplication;

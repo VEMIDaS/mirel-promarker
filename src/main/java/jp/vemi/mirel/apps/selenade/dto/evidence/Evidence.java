@@ -1,17 +1,16 @@
+/*
+ * Copyright(c) 2015-2025 vemi/mirelplatform.
+ */
 package jp.vemi.mirel.apps.selenade.dto.evidence;
 
 import com.google.common.collect.Lists;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
+@lombok.Data
 public class Evidence {
 
-    java.util.List<Object> headers;
-    java.util.List<Object> data;
-    java.util.List<Object> footers;
+    private java.util.List<Object> headers;
+    private java.util.List<Object> data;
+    private java.util.List<Object> footers;
 
     /**
      * default constructor.

@@ -1,3 +1,6 @@
+/*
+ * Copyright(c) 2015-2025 vemi/mirelplatform.
+ */
 package jp.vemi.mirel.apps.selenade.dto.evidence;
 
 import java.util.List;
@@ -5,14 +8,8 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@lombok.Data
+@lombok.NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class QueryLog {
 
     private String sql;

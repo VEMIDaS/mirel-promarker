@@ -1,3 +1,6 @@
+/*
+ * Copyright(c) 2015-2025 vemi/mirelplatform.
+ */
 package jp.vemi.mirel.apps.selenade.evidencve;
 
 import java.io.BufferedWriter;
@@ -130,7 +133,6 @@ public class EvidenceManager {
 
             return this;
         }
-
 
         // ?
         evidence.addData(object);
@@ -293,7 +295,7 @@ public class EvidenceManager {
      * @throws Throwable
      */
     private static <T> void printModel(List<T> args, StringBuilder output)
-        throws Throwable {
+            throws Throwable {
     }
 
     public static class ImageFile extends File {

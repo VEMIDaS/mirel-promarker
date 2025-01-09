@@ -5,44 +5,35 @@ package jp.vemi.mirel.apps.selenade.dto.yml;
 
 import java.util.List;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
  * Data.
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@lombok.Data
+@lombok.NoArgsConstructor
 public class ArConfig {
 
-    Config config;
+    private Config config;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Config {
-        String id;
+        private String id;
         /** environment */
-        List<Environment> environment;
+        private List<Environment> environment;
     }
 
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Environment {
-        String id;
-        List<Server> server;
+        private String id;
+        private List<Server> server;
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
+    @lombok.Data
+    @lombok.NoArgsConstructor
     public static class Server {
-        String id;
-        String url;
+        private String id;
+        private String url;
     }
 
 }
